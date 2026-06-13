@@ -1,0 +1,381 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - AW Associates Vehicle Valuation</title>
+  <meta name="description" content="AW Associates Vehicle Valuation System — Secure staff portal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script is:inline src="/demo-api.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --b400: #60a5fa; --b500: #3b82f6;
+      --b600: #2563eb; --b700: #1d4ed8;
+      --b50:  #eff6ff; --b100: #dbeafe;
+      --n50:  #f8fafc; --n100: #f1f5f9;
+      --n200: #e2e8f0; --n300: #cbd5e1;
+      --n400: #94a3b8; --n500: #64748b;
+      --n600: #475569; --n700: #334155;
+      --n800: #1e293b; --n900: #0f172a;
+    }
+
+    html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    /* ── Full-page background image ── */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+    }
+    .bg img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+    }
+    /* Soft dark overlay — NOT heavy blue */
+    .bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(
+        150deg,
+        rgba(8, 15, 35, .70) 0%,
+        rgba(12, 24, 55, .52) 50%,
+        rgba(20, 50, 120, .30) 100%
+      );
+    }
+
+    /* ── Center wrapper ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+
+    /* ── Card shell (glow ring) ── */
+    .card-shell {
+      position: relative;
+    }
+    .card-shell::before {
+      content: ''; position: absolute; inset: -1px;
+      border-radius: 23px;
+      background: linear-gradient(135deg, rgba(255,255,255,.2), rgba(255,255,255,.04));
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative; z-index: 1;
+      width: 420px;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(20px);
+      border-radius: 22px;
+      padding: 42px 40px 34px;
+      box-shadow:
+        0 40px 100px rgba(5, 12, 30, .50),
+        0 10px 30px rgba(5, 12, 30, .25),
+        0 0 0 1px rgba(255,255,255,.14);
+    }
+
+
+
+    /* Logo row */
+    .logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .logo-icon {
+      width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+      display: grid; place-items: center;
+      background: #000;
+      border-radius: 8px;
+      padding: 4px;
+    }
+    .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .logo-name { display: block; font-size: 1rem; font-weight: 800; color: var(--n900); }
+    .logo-tag  { font-size: .67rem; color: var(--n400); font-weight: 500; }
+
+    /* Heading */
+    .form-h2  { font-size: 1.5rem; font-weight: 800; color: var(--n900); letter-spacing: -.03em; }
+    .form-sub { font-size: .83rem; color: var(--n400); margin-top: 4px; margin-bottom: 24px; }
+
+    /* Role toggle */
+    .role-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 20px; }
+    .role-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 8px;
+      border: 1.5px solid var(--n200); border-radius: 10px;
+      background: var(--n50);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .82rem; font-weight: 600; color: var(--n500);
+      cursor: pointer; transition: all .17s; user-select: none;
+    }
+    .role-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .role-btn:hover  { border-color: var(--b400); color: var(--b700); background: var(--b50); }
+    .role-btn.active {
+      border-color: var(--b500); background: var(--b50);
+      color: var(--b700); box-shadow: 0 0 0 3px rgba(59,130,246,.1);
+    }
+
+    /* Divider */
+    .sep {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .69rem; color: var(--n400); font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .sep::before, .sep::after { content: ''; flex: 1; height: 1px; background: var(--n200); }
+
+    /* Field */
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
+    .field label { font-size: .76rem; font-weight: 700; color: var(--n700); }
+    .fw { position: relative; }
+    .fi {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--n400); display: flex; pointer-events: none;
+    }
+    .fi svg { width: 15px; height: 15px; }
+    .field input {
+      width: 100%; padding: 11px 40px;
+      border: 1.5px solid var(--n200); border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .875rem; color: var(--n800); background: var(--n50);
+      transition: all .17s; outline: none;
+    }
+    .field input:focus {
+      border-color: var(--b400); background: #fff;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.08);
+    }
+    .field input::placeholder { color: var(--n300); }
+
+    .eye-btn {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--n400); display: flex; padding: 3px; transition: color .14s;
+    }
+    .eye-btn:hover { color: var(--n600); }
+    .eye-btn svg { width: 15px; height: 15px; }
+
+    /* Forgot */
+    .forgot { display: flex; justify-content: flex-end; margin: -2px 0 16px; }
+    .forgot a { font-size: .75rem; color: var(--b600); font-weight: 600; text-decoration: none; }
+    .forgot a:hover { text-decoration: underline; }
+
+    /* Error */
+    .err {
+      display: none; align-items: flex-start; gap: 8px;
+      background: #fef2f2; border: 1.5px solid #fecaca;
+      border-radius: 9px; padding: 10px 12px;
+      font-size: .8rem; color: #dc2626; font-weight: 600; margin-bottom: 13px;
+    }
+    .err.show { display: flex; }
+    .err svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Submit */
+    .sub {
+      width: 100%; padding: 12px;
+      background: linear-gradient(135deg, var(--b600), var(--b500));
+      border: none; border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: .91rem; font-weight: 700; color: #fff;
+      cursor: pointer; transition: all .2s;
+      box-shadow: 0 4px 16px rgba(37,99,235,.3);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .sub:hover:not(:disabled) {
+      background: linear-gradient(135deg, var(--b700), var(--b600));
+      box-shadow: 0 7px 22px rgba(37,99,235,.42);
+      transform: translateY(-1px);
+    }
+    .sub:active  { transform: translateY(0); }
+    .sub:disabled { opacity: .7; cursor: not-allowed; }
+    .sub svg { width: 15px; height: 15px; }
+
+    .spin {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: sp .6s linear infinite; display: none;
+    }
+    @keyframes sp { to { transform: rotate(360deg); } }
+
+    /* Copyright line inside card */
+    .copy {
+      margin-top: 22px; padding-top: 16px;
+      border-top: 1px solid var(--n200);
+      text-align: center;
+      font-size: .72rem; color: var(--n400); font-weight: 500;
+    }
+    .copy strong { color: var(--n600); }
+
+    @media (max-width: 480px) {
+      .card { width: 100%; padding: 32px 20px 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Full-page background -->
+<div class="bg">
+  <img src="/login-hero.png" alt="AW Associates vehicle showroom" />
+</div>
+
+<!-- Centered card -->
+<div class="page">
+  <div class="card-shell">
+    <div class="card">
+      <!-- Logo -->
+      <div class="logo-row">
+        <div class="logo-icon">
+          <img src="/Logo.png" alt="AW Associates Logo" style="width:100%;height:100%;object-fit:contain;" />
+        </div>
+        <div>
+          <span class="logo-name">AW Associates</span>
+          <span class="logo-tag">Vehicle Valuation System</span>
+        </div>
+      </div>
+
+      <h2 class="form-h2">Welcome back</h2>
+      <p class="form-sub">Sign in to access your dashboard</p>
+
+      <div class="sep">Enter your credentials</div>
+
+      <!-- Form -->
+      <form id="loginForm" autocomplete="on">
+
+        <div class="field">
+          <label for="username">Username</label>
+          <div class="fw">
+            <span class="fi">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <input type="text" id="username" name="username"
+              placeholder="Enter your username" autocomplete="username" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="fw">
+            <span class="fi">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <input type="password" id="password" name="password"
+              placeholder="Enter your password" autocomplete="current-password" required />
+            <button type="button" class="eye-btn" id="eyeBtn">
+              <svg id="eyeIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="forgot"><a href="#">Forgot password?</a></div>
+
+        <div class="err" id="errBox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="errMsg">Invalid username or password.</span>
+        </div>
+
+        <button type="submit" class="sub" id="subBtn">
+          <div class="spin" id="spin"></div>
+          <span id="subTxt">Sign In</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+
+        <!-- Demo quick access -->
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0;">
+          <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-bottom:10px;font-weight:700;letter-spacing:.06em;">— OR EXPLORE THE DEMO —</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <button type="button" id="demoAdminBtn"
+              style="padding:11px 8px;border:1.5px solid #dbeafe;border-radius:9px;background:#eff6ff;color:#1d4ed8;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .17s;display:flex;align-items:center;justify-content:center;gap:6px;">
+              👤 Admin Demo
+            </button>
+            <button type="button" id="demoUserBtn"
+              style="padding:11px 8px;border:1.5px solid #d1fae5;border-radius:9px;background:#ecfdf5;color:#065f46;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .17s;display:flex;align-items:center;justify-content:center;gap:6px;">
+              👷 Staff Demo
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="copy">
+        © 2025 <strong>AW Associates</strong> · Vehicle Valuation System
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:8080';
+
+  let pwdShow = false;
+  document.getElementById('eyeBtn').addEventListener('click', function() {
+    pwdShow = !pwdShow;
+    document.getElementById('password').type = pwdShow ? 'text' : 'password';
+    document.getElementById('eyeIco').innerHTML = pwdShow
+      ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`
+      : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  });
+
+  const showErr = msg => { document.getElementById('errMsg').textContent = msg; document.getElementById('errBox').classList.add('show'); };
+  const hideErr = ()  => document.getElementById('errBox').classList.remove('show');
+  const setLoad = on  => {
+    document.getElementById('subBtn').disabled     = on;
+    document.getElementById('spin').style.display  = on ? 'block' : 'none';
+    document.getElementById('subTxt').textContent  = on ? 'Signing in…' : 'Sign In';
+  };
+
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault(); hideErr();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    if (!username || !password) { showErr('Please enter your username and password.'); return; }
+    setLoad(true);
+    try {
+      const res  = await fetch(`${API}/api/auth/login`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (!data.success) { showErr(data.message || 'Invalid credentials.'); setLoad(false); return; }
+      localStorage.setItem('aw_token', data.data.token);
+      localStorage.setItem('aw_user',  JSON.stringify(data.data.user));
+      window.location.href = data.data.user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+    } catch {
+      showErr('Cannot connect to server. Make sure the backend is running on port 8080.');
+      setLoad(false);
+    }
+  });
+
+  document.getElementById('username').addEventListener('input', hideErr);
+  document.getElementById('password').addEventListener('input', hideErr);
+
+  // Demo quick-login buttons
+  document.getElementById('demoAdminBtn')?.addEventListener('click', () => {
+    localStorage.setItem('aw_token', 'demo-jwt-token-aw-associates-2025');
+    localStorage.setItem('aw_user', JSON.stringify({ id:1, username:'demo', first_name:'Demo', last_name:'Admin', role:'admin', branch:'10' }));
+    window.location.href = '/admin/dashboard';
+  });
+  document.getElementById('demoUserBtn')?.addEventListener('click', () => {
+    localStorage.setItem('aw_token', 'demo-jwt-token-aw-associates-2025');
+    localStorage.setItem('aw_user', JSON.stringify({ id:2, username:'demo_user', first_name:'Demo', last_name:'User', role:'user', branch:'10' }));
+    window.location.href = '/user/dashboard';
+  });
+</script>
+</body>
+</html>

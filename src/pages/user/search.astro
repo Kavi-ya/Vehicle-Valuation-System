@@ -1,0 +1,115 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Icon from '../../components/Icon.astro';
+---
+<DashboardLayout title="Search Vehicle" subtitle="Find vehicle valuation records" role="user" activePage="search">
+  <div class="page-header">
+    <h1>Search Vehicle</h1>
+    <p>Search through vehicle valuation records</p>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-body" style="display:flex;gap:12px;align-items:center;">
+      <div class="search-icon-wrapper" style="position:relative;flex:1;max-width:600px;">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--neutral-400);"><Icon name="search" size="18"/></span>
+        <input type="text" class="form-control" id="q_all" placeholder="Search by Register No, Make, Model, Engine, YOM..." oninput="filterTable()" style="width:100%;padding-left:36px;height:42px;font-size:1rem;" />
+      </div>
+      <button class="btn btn-secondary" onclick="clearSearch()" style="height:42px;"><Icon name="x" size="16"/> Clear</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:var(--primary-100);color:var(--primary-600);"><Icon name="car" /></div>
+        Results <span class="badge badge-blue" id="resultCount">5 records</span>
+      </div>
+    </div>
+    <div class="table-wrapper" style="border:none;border-radius:0;">
+      <table id="vehicleTable">
+        <thead>
+          <tr><th>ID</th><th>Register No.</th><th>Make</th><th>Model</th><th>Engine No.</th><th>YOM</th><th>Market Value</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="vtbody">
+          <tr><td colspan="9" style="text-align:center;padding:32px;color:var(--neutral-400);">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+const API = 'http://localhost:8080';
+const token = localStorage.getItem('aw_token') || '';
+
+let allData = [];
+
+async function loadValuations() {
+  try {
+    const res = await fetch(`${API}/api/valuations?per_page=500`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    allData = (data.success && data.data?.items) ? data.data.items : [];
+  } catch(e) {
+    console.error(e);
+    allData = [];
+  }
+  window.filterTable();
+}
+
+window.filterTable = function() {
+  const q = document.getElementById('q_all').value.toLowerCase();
+  
+  const rows = allData.filter(v => {
+    const text = [
+      v.reg_no, v.make, v.model, String(v.id), v.engine_no, String(v.yom)
+    ].join(' ').toLowerCase();
+    return !q || text.includes(q);
+  });
+
+  document.getElementById('resultCount').textContent = rows.length + ' records';
+
+  const tbody = document.getElementById('vtbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--neutral-400);">No matching records found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(v => {
+    const st = v.status || 'Pending';
+    const cls = st === 'Approved' ? 'badge-success' : st === 'Rejected' ? 'badge-danger' : 'badge-warning';
+    
+    return `
+      <tr>
+        <td class="td-mono" style="color:var(--neutral-400);">#${v.id}</td>
+        <td class="td-mono" style="font-weight:600;">${v.reg_no || '—'}</td>
+        <td style="font-weight:500;">${v.make || '—'}</td>
+        <td style="color:var(--neutral-600);">${v.model || '—'}</td>
+        <td class="td-mono" style="font-size:.78rem;">${v.engine_no || '—'}</td>
+        <td class="td-mono">${v.yom || '—'}</td>
+        <td class="td-mono" style="font-weight:600;">Rs. ${(v.market_value||0).toLocaleString()}</td>
+        <td><span class="badge ${cls}">${st}</span></td>
+        <td>
+          <div style="display:flex;gap:4px;">
+            <a href="/user/view-valuation?id=${v.id}" class="btn btn-ghost btn-sm" title="View Details" style="padding:4px;">${window.ICONS.eye || 'View'}</a>
+            <a href="/user/add-valuation?edit=${v.id}" class="btn btn-ghost btn-sm" title="Edit" style="padding:4px;${st !== 'Pending' ? 'opacity:.35;pointer-events:none;' : ''}">${window.ICONS.edit || 'Edit'}</a>
+            <a href="javascript:void(0)" onclick="window.open('/reports/${v.id}?token=' + encodeURIComponent(localStorage.getItem('aw_token')), '_blank')" class="btn btn-ghost btn-sm" title="Print" style="padding:4px;${st !== 'Approved' ? 'opacity:.35;pointer-events:none;' : ''}">${window.ICONS.printer || 'Print'}</a>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+};
+
+window.clearSearch = function() {
+  const el = document.getElementById('q_all');
+  if (el) el.value = '';
+  window.filterTable();
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadValuations);
+} else {
+  loadValuations();
+}
+</script>

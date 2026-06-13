@@ -1,0 +1,241 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Icon from '../../components/Icon.astro';
+
+const optionTypes = [
+  'Air type',
+  'Body Color',
+  'Body Conditions',
+  'Body type',
+  'Brake Conditions',
+  'Brake Type',
+  'Clutch Conditions',
+  'Clutch type',
+  'Countries',
+  'Differential Condition',
+  'Differential Type',
+  'Electrical Condition',
+  'Finance Branch',
+  'Finance Company',
+  'Fuel System',
+  'Fuel Types',
+  'Gearbox Condition',
+  'Inspectors',
+  'Interior Types',
+  'Maintain Conditions',
+  'Make Details',
+  'Opinion provider',
+  'Option Condition',
+  'Seat Data',
+  'Starter Types',
+  'Steering Types',
+  'Suspension Conditions',
+  'Suspension Type',
+  'Test Types',
+  'Transmission Types',
+  'Types of Vehicle',
+  'Tyre Front Type',
+  'Tyre Material Type',
+  'Tyre Rear Type',
+  'Tyre Wheel Type',
+  'VAT Status',
+  'Vehicle Condition',
+  'Wiper Type',
+  'Yard Details'
+];
+---
+<DashboardLayout title="Form Options" subtitle="View available form options" role="user" activePage="form-options">
+  <div class="page-header">
+    <h1>Form Options</h1>
+    <p>Available options for valuation form fields (read-only)</p>
+  </div>
+
+  <style>
+  .cat-item {
+    break-inside: avoid;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .cat-item:hover {
+    background-color: var(--primary-50);
+    color: var(--primary-700);
+  }
+  .cat-item.active {
+    background-color: var(--primary-100);
+    color: var(--primary-800);
+    font-weight: 600;
+  }
+  </style>
+
+  <!-- Form Options Categories List Banner (Matching Image) -->
+  <div style="background:#fff;border:1px solid var(--neutral-200);margin-bottom:24px;box-shadow:var(--shadow-sm);">
+    <div style="padding:16px 24px;">
+      <ul style="column-count:5;column-gap:24px;list-style-type:disc;margin:0;padding-left:16px;font-size:0.75rem;color:var(--neutral-700);line-height:1.8;">
+        {optionTypes.map(t => <li class="cat-item" onclick={`selectCategory('${t}', this)`}>{t}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-info" style="margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+    <Icon name="info" size="18" /> Form options are managed by administrators. Contact your admin to add or modify options.
+  </div>
+
+  <div class="card" id="optionsCard" style="display:none;">
+    <div class="card-header">
+      <div class="card-title" id="optionsCardTitle">
+        <div class="icon" style="background:var(--neutral-100);color:var(--neutral-600);"><Icon name="cog" /></div>
+        <span>Select a Category</span>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon"><Icon name="search" size="14" /></span>
+        <input type="text" class="form-control" id="optSearch" placeholder="Search options..." style="width:200px;" oninput="searchOptions()" />
+      </div>
+    </div>
+    <div id="optGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:12px;padding:20px;">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</DashboardLayout>
+<script>
+const API = 'http://localhost:8080';
+let allOptions = [];
+let currentCategory = '';
+
+async function loadOptions() {
+  try {
+    const token = localStorage.getItem('aw_token');
+    if (!token) { window.location.href='/'; return; }
+    const res = await fetch(`${API}/api/options`, { headers: { 'Authorization': 'Bearer ' + token }});
+    if (!res.ok) throw new Error('Failed to load options');
+    const json = await res.json();
+    allOptions = json.data || [];
+    if(currentCategory) renderOptions();
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+window.selectCategory = function(cat, el) {
+  currentCategory = cat;
+  
+  document.querySelectorAll('.cat-item').forEach(li => li.classList.remove('active'));
+  if (el) el.classList.add('active');
+  
+  document.getElementById('optionsCard').style.display = 'block';
+  document.getElementById('optionsCardTitle').innerHTML = `
+    <span>Options for: ${cat}</span>
+  `;
+
+  renderOptions();
+};
+
+const mapSelectsToOptions = {
+  'sel_openion_provider': 'Opinion provider',
+  'sel_finance': 'Finance Company',
+  'sel_finance_branch': 'Finance Branch',
+  'sel_make': 'Make Details',
+  'sel_country_origin': 'Countries',
+  'sel_country_used': 'Countries',
+  'sel_fuel_type': 'Fuel Types',
+  'sel_color': 'Body Color',
+  'sel_seat': 'Seat Data',
+  'sel_fuel_sys': 'Fuel System',
+  'sel_yard': 'Yard Details',
+  'sel_branch': 'Finance Branch',
+  'sel_vat': 'VAT Status',
+  'sel_transmission': 'Transmission Types',
+  'sel_gearbox_con': 'Gearbox Condition',
+  'sel_wheel_type': 'Tyre Wheel Type',
+  'sel_tyre_front_type': 'Tyre Front Type',
+  'sel_tyrefr_meterial': 'Tyre Material Type',
+  'sel_tyre_rear_type': 'Tyre Rear Type',
+  'sel_tyrere_meterial': 'Tyre Material Type',
+  'sel_starter': 'Starter Types',
+  'sel_starter_con': 'Electrical Condition',
+  'sel_clutch': 'Clutch type',
+  'sel_clutch_con': 'Clutch Conditions',
+  'sel_wiper_type': 'Wiper Type',
+  'sel_wiper_con': 'Option Condition',
+  'sel_shaft_type': 'Suspension Type',
+  'sel_shaft_con': 'Suspension Conditions',
+  'sel_differential': 'Differential Type',
+  'sel_differential_con': 'Differential Condition',
+  'sel_horn_con': 'Option Condition',
+  'sel_light_con': 'Option Condition',
+  'sel_meter_con': 'Option Condition',
+  'sel_alternator_con': 'Option Condition',
+  'sel_foot_brake': 'Brake Type',
+  'sel_ftbrake_con': 'Brake Conditions',
+  'sel_pkbrake_con': 'Brake Conditions',
+  'sel_steering': 'Steering Types',
+  'sel_steering_con': 'Option Condition',
+  'sel_suspen_fr_type': 'Suspension Type',
+  'sel_suspen_fr_con': 'Suspension Conditions',
+  'sel_suspen_re_type': 'Suspension Type',
+  'sel_suspen_re_con': 'Suspension Conditions',
+  'sel_engine_con': 'Maintain Conditions',
+  'sel_engine_status': 'Vehicle Condition',
+  'sel_body_con': 'Body Conditions',
+  'sel_chassis_con': 'Maintain Conditions',
+  'sel_pwshutter_con': 'Option Condition',
+  'sel_pwmirror_con': 'Option Condition',
+  'sel_air_type': 'Air type',
+  'sel_ac_con': 'Option Condition',
+  'sel_body_maint': 'Maintain Conditions',
+  'sel_vehicle_con': 'Vehicle Condition',
+  'sel_intertrim': 'Interior Types',
+  'sel_intertrim_con': 'Option Condition',
+  'sel_vehicle_type': 'Types of Vehicle',
+  'sel_body_type': 'Body type',
+  'sel_test_type': 'Test Types',
+  'sel_complience_envir': 'Option Condition',
+  'sel_inspection': 'Inspectors',
+};
+
+function renderOptions() {
+  if (!currentCategory) return;
+  const grid = document.getElementById('optGrid');
+  grid.innerHTML = '';
+  
+  const catLower = currentCategory.toLowerCase();
+  
+  const validDbKeys = Object.keys(mapSelectsToOptions)
+    .filter(k => mapSelectsToOptions[k].toLowerCase() === catLower)
+    .map(k => k.toLowerCase());
+  validDbKeys.push(catLower);
+  
+  const filtered = allOptions.filter(o => 
+    o.option_type && validDbKeys.includes(o.option_type.toLowerCase())
+  ).sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+  
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--neutral-400);padding:20px;">No options found for this category.</div>`;
+    return;
+  }
+
+  filtered.forEach(o => {
+    const item = document.createElement('div');
+    item.className = 'opt-grid-item';
+    item.dataset.val = o.value.toLowerCase();
+    item.style.cssText = 'padding:12px 16px;border:1px solid var(--neutral-200);border-radius:6px;background:#fff;font-weight:500;box-shadow:var(--shadow-sm);word-break:break-word;';
+    item.innerHTML = `<div style="font-weight:600;">${o.label || o.value}</div>${o.label && o.label !== o.value ? `<div style="font-size:0.8em;color:var(--neutral-500);margin-top:4px;">Value: ${o.value}</div>` : ''}`;
+    grid.appendChild(item);
+  });
+}
+
+window.searchOptions = function() {
+  const q = document.getElementById('optSearch').value.toLowerCase();
+  document.querySelectorAll('#optGrid .opt-grid-item').forEach(el => {
+    if (!el.dataset.val) return;
+    el.style.display = el.dataset.val.includes(q) ? '' : 'none';
+  });
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadOptions);
+} else {
+  loadOptions();
+}
+</script>

@@ -1,0 +1,53 @@
+---
+const { vehicle, images } = Astro.props;
+---
+<div style="display: grid; grid-template-columns: 63% 32%; gap: 5%;">
+    <!-- Left Column: Details -->
+    <div>
+        <div class="section-title" style="color: purple; background: transparent; border: none; padding: 0; margin-bottom: 10px; font-size: 14px;">VEHICLE IDENTIFICATION DETAILS</div>
+        <div style="display: flex; flex-direction: column; row-gap: 0px;">
+            <div class="data-row" style="border:none;"><span>1.1 Make</span> <span>: <strong>{vehicle.make}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.2 Model</span> <span>: <strong>{vehicle.model}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.3 Classification</span> <span>: <strong>{vehicle.classification}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.4 Country of Origin</span> <span>: <strong>{vehicle.origin}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.5 Country of Used</span> <span>: <strong>{vehicle.usedCountry}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.6 Year of Manufacture</span> <span>: <strong>{vehicle.yom}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.7 Registration no</span> <span>: <strong>{vehicle.regNo}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.8 Date of Registration</span> <span>: <strong>{vehicle.regDate}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.9 Engine No</span> <span>: <strong>{vehicle.engineNo}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.10 Fuel System</span> <span>: <strong>{vehicle.fuelSystem}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.11 Engine Capacity</span> <span>: <strong>{vehicle.capacity}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.12 Chassis No</span> <span>: <strong>{vehicle.chassisNo}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.13 Type of fuel</span> <span>: <strong>{vehicle.fuelType}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.14 If Converted Date & type</span> <span>: <strong>{vehicle.conversionDetails}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.15 Switch Key no</span> <span>: <strong>{vehicle.keyNo}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.16 Meter reading</span> <span>: <strong>{vehicle.meterReading}</strong> {vehicle.meterUnit}</span></div>
+            <div class="data-row" style="border:none;"><span>1.17 Num. of Prev. Owners</span> <span>: <strong>{vehicle.prevOwners}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.18 Importers</span> <span>: <strong>{vehicle.importers}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.19 Date of Import</span> <span>: <strong>{vehicle.importDate}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.20 Date of Clearing</span> <span>: <strong>{vehicle.clearingDate}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.21 Color/s</span> <span>: <strong>{vehicle.color}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.22 Just Low</span> <span>: <strong>{vehicle.justLow}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.23 Seating Capacities</span> <span>: <strong>{vehicle.seating}</strong></span></div>
+            <div class="data-row" style="border:none;"><span>1.24 4x4 Wheel Drive</span> <span>: <strong>{vehicle.fourWheelDrive}</strong></span></div>
+            
+            <div class="data-row" style="border:none; margin-top: 4px;"><span><strong>1.25 Current Owner</strong></span> <span>: <strong>{vehicle.currentOwner}</strong></span></div>
+            <div class="data-row" style="border:none; margin-top: 4px;"><span>1.26 Compliance of above : (1.0-1.24) With CR</span> <span>: <strong>{vehicle.compliance}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 20px;"><span>If No Comments</span> <span>: <strong>{vehicle.complianceComments}</strong></span></div>
+            
+            <div class="data-row" style="border:none; margin-top: 4px;"><span><strong>2.0 Road Test</strong> :- <span style="text-decoration: underline; color: blue;">Done</span> on</span> <span>: <strong>{vehicle.roadTestDoneOn}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 20px;"><span>Not Done because</span> <span>: <strong>{vehicle.roadTestNotDoneReason}</strong></span></div>
+            <div class="data-row" style="border:none; margin-top: 4px;"><span>2.1 Average Fuel Consumption Per liter:</span> <span><strong>{vehicle.fuelConsumption}</strong></span></div>
+            <div class="data-row" style="border:none; margin-top: 4px;"><span><strong>3.0 Availability of Spares</strong></span> <span>: Body Parts<br>: Engine Parts<br>: Accessories</span></div>
+            <div class="data-row" style="border:none; margin-top: 4px;"><span><strong>3.1 Extra Option</strong></span> <span>: <strong>{vehicle.extraOption}</strong></span></div>
+        </div>
+    </div>
+    
+    <!-- Right Column: Images -->
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        <img src={images.img4} alt="Image 4" style="width: 100%; height: auto; object-fit: contain;" />
+        <img src={images.img5} alt="Image 5" style="width: 100%; height: auto; object-fit: contain;" />
+        <img src={images.img2} alt="Image 2" style="width: 100%; height: auto; object-fit: contain;" />
+        <img src={images.img1} alt="Image 1" style="width: 100%; height: auto; object-fit: contain;" />
+    </div>
+</div>

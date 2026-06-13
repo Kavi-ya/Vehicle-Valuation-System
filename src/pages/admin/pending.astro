@@ -1,0 +1,189 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Icon from '../../components/Icon.astro';
+---
+<DashboardLayout title="Pending Reports" subtitle="Review and approve pending valuations" role="admin" activePage="pending">
+
+  <div class="page-header">
+    <h1>Pending Reports</h1>
+    <p>13 valuations awaiting review and approval</p>
+  </div>
+
+  <div class="alert alert-info" style="margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+    <Icon name="info" size="18" /> These valuations have been submitted and are awaiting admin approval before being finalized.
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:var(--warning-100);color:#d97706;"><Icon name="clock" /></div>
+        Pending Valuations
+        <span class="badge badge-warning">13</span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-success btn-sm" onclick="approveAll()"><Icon name="check" size="14"/> Approve Selected</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectAll()"><Icon name="x" size="14"/> Reject Selected</button>
+      </div>
+    </div>
+
+    <div class="table-wrapper" style="border:none;border-radius:0;">
+      <table id="pendingTable">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll" onchange="toggleAll(this)" style="width:14px;height:14px;" /></th>
+            <th>ID</th>
+            <th>Register No.</th>
+            <th>Make / Model</th>
+            <th>Branch</th>
+            <th>Submitted By</th>
+            <th>Date</th>
+            <th>Market Value</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="pendingBody">
+          <tr><td colspan="9" style="text-align:center;padding:28px;color:#9ca3af;">Loading pending valuations…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+const API = 'http://localhost:8080';
+const token = localStorage.getItem('aw_token') || '';
+
+async function loadPending() {
+  try {
+    const res = await fetch(`${API}/api/valuations?per_page=100`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    const tbody = document.getElementById('pendingBody');
+    
+    if (data.success && data.data && data.data.items) {
+      const pending = data.data.items.filter(v => v.status === 'Pending' || v.status === 'pending' || !v.status);
+      
+      document.querySelector('.badge-warning').textContent = pending.length;
+      document.querySelector('.page-header p').textContent = `${pending.length} valuations awaiting review and approval`;
+
+      if (pending.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:28px;color:#9ca3af;">No pending valuations found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = pending.map(v => {
+        const makeModel = [v.make, v.model].filter(Boolean).join(' ') || 'Unknown';
+        const dateStr = v.created_at ? new Date(v.created_at).toLocaleDateString() : '—';
+        const initial = 'U';
+        
+        return `
+          <tr data-id="${v.id}">
+            <td><input type="checkbox" class="row-check" value="${v.id}" style="width:14px;height:14px;" /></td>
+            <td class="td-mono" style="color:var(--neutral-400);">#${v.id}</td>
+            <td class="td-mono" style="font-weight:600;">${v.reg_no || '—'}</td>
+            <td>
+              <div style="font-weight:500;">${v.make || '—'}</div>
+              <div style="font-size:.75rem;color:var(--neutral-400);">${v.model || '—'}</div>
+            </td>
+            <td style="color:var(--neutral-600);">${v.branch || '—'}</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--primary-400),var(--primary-700));display:grid;place-items:center;font-size:.65rem;font-weight:700;color:#fff;">${initial}</div>
+                User ${v.created_by || 'Unknown'}
+              </div>
+            </td>
+            <td class="td-mono" style="font-size:.8rem;">${dateStr}</td>
+            <td class="td-mono" style="font-weight:600;">Rs. ${(v.market_value || 0).toLocaleString()}</td>
+            <td>
+              <div style="display:flex;gap:4px;">
+                <button class="btn btn-success btn-sm" onclick="updateStatus(${v.id}, 'Approved', this)" style="padding:4px;" title="Approve"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></button>
+                <button class="btn btn-danger btn-sm" onclick="updateStatus(${v.id}, 'Rejected', this)" style="padding:4px;" title="Reject"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></button>
+                <a href="/admin/view-valuation?id=${v.id}" class="btn btn-ghost btn-sm" title="View Details" style="padding:4px;">${window.ICONS.eye}</a>
+                <a href="javascript:void(0)" onclick="window.open('/reports/${v.id}?token=' + encodeURIComponent(localStorage.getItem('aw_token')), '_blank')" class="btn btn-ghost btn-sm" title="Print" style="padding:4px;">${window.ICONS.printer}</a>
+                <a href="/admin/add-valuation?edit=${v.id}" class="btn btn-ghost btn-sm" title="Review / Edit" style="padding:4px;">${window.ICONS.edit}</a>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:28px;color:#9ca3af;">Could not load pending valuations</td></tr>';
+    }
+  } catch (err) {
+    console.error('Failed to load pending', err);
+    document.getElementById('pendingBody').innerHTML = '<tr><td colspan="9" style="text-align:center;padding:28px;color:#9ca3af;">Could not connect to server</td></tr>';
+  }
+}
+
+window.toggleAll = function(cb) {
+  document.querySelectorAll('.row-check').forEach(c => c.checked = cb.checked);
+}
+
+window.updateStatus = async function(id, newStatus, btnElement) {
+  if (!confirm(`Are you sure you want to mark valuation #${id} as ${newStatus}?`)) return;
+  
+  if (btnElement) {
+    const row = btnElement.closest('tr');
+    row.style.opacity = '0.5';
+    row.style.pointerEvents = 'none';
+  }
+
+  try {
+    const res = await fetch(`${API}/api/valuations/${id}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ status: newStatus })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      if (btnElement) {
+        btnElement.closest('tr').remove();
+      }
+      loadPending(); // Refresh stats header
+    } else {
+      alert(data.message || 'Failed to update status');
+      if (btnElement) {
+        btnElement.closest('tr').style.opacity = '1';
+        btnElement.closest('tr').style.pointerEvents = 'auto';
+      }
+    }
+  } catch (err) {
+    alert('Server error');
+    if (btnElement) {
+      btnElement.closest('tr').style.opacity = '1';
+      btnElement.closest('tr').style.pointerEvents = 'auto';
+    }
+  }
+}
+
+window.approveAll = async function() {
+  const checked = document.querySelectorAll('.row-check:checked');
+  if (checked.length === 0) return alert('No valuations selected');
+  if (!confirm(`Approve ${checked.length} valuations?`)) return;
+  
+  for (const cb of checked) {
+    const id = cb.value;
+    const btn = cb.closest('tr').querySelector('.btn-success');
+    await updateStatus(id, 'Approved', btn);
+  }
+}
+
+window.rejectAll = async function() {
+  const checked = document.querySelectorAll('.row-check:checked');
+  if (checked.length === 0) return alert('No valuations selected');
+  if (!confirm(`Reject ${checked.length} valuations?`)) return;
+  
+  for (const cb of checked) {
+    const id = cb.value;
+    const btn = cb.closest('tr').querySelector('.btn-danger');
+    await updateStatus(id, 'Rejected', btn);
+  }
+}
+
+loadPending();
+</script>

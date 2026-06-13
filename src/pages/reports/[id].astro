@@ -1,0 +1,192 @@
+---
+export const prerender = false;
+
+import ReportLayout from '../../layouts/ReportLayout.astro';
+import HeaderBanner from '../../components/HeaderBanner.astro';
+import VehicleDetails from '../../components/VehicleDetails.astro';
+import TechnicalEvaluation from '../../components/TechnicalEvaluation.astro';
+import SignatureBlock from '../../components/SignatureBlock.astro';
+
+import converter from 'number-to-words';
+
+const { id } = Astro.params;
+const token = Astro.url.searchParams.get('token');
+
+// If no token, we can't fetch protected data
+if (!token) {
+    return new Response("Unauthorized: Missing token in URL. Please open this from the dashboard.", { status: 401 });
+}
+
+// 1. Fetch JSON data from the actual Go API
+const response = await fetch(`http://localhost:8080/api/valuations/${id}`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+});
+
+if (!response.ok) {
+    return new Response(`Error fetching report: ${response.statusText}`, { status: response.status });
+}
+
+const apiData = await response.json();
+if (!apiData.success) {
+    return new Response(`Error: ${apiData.message}`, { status: 500 });
+}
+
+const v = apiData.data;
+
+let financeCompanyLabel = v.finance_company;
+let financeBranchLabel = v.finance_branch;
+try {
+    const optRes = await fetch(`http://localhost:8080/api/options`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (optRes.ok) {
+        const optData = await optRes.json();
+        if (optData.success && optData.data) {
+            const fcMatch = optData.data.find(o => o.option_type === 'Finance Company' && (String(o.value) === String(v.finance_company) || String(o.id) === String(v.finance_company)));
+            if (fcMatch) financeCompanyLabel = fcMatch.label || fcMatch.value;
+            const fbMatch = optData.data.find(o => o.option_type === 'Finance Branch' && (String(o.value) === String(v.finance_branch) || String(o.id) === String(v.finance_branch)));
+            if (fbMatch) financeBranchLabel = fbMatch.label || fbMatch.value;
+        }
+    }
+} catch (e) {
+    console.error('Failed to fetch finance options', e);
+}
+
+const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+
+// 2. Map the flat Go API struct to the nested objects expected by your Astro components
+const meta = { 
+    refNo: v.id || 'N/A', 
+    date: v.created_at ? v.created_at.substring(0, 10) : 'N/A', 
+    inspectionDate: v.inspection_date || 'N/A', 
+    inspectionPlace: v.inspect_location || '-',
+    opinionTo: v.opinion_to,
+    financeCompany: financeCompanyLabel,
+    financeBranch: financeBranchLabel
+};
+
+const vehicle = {
+    make: v.make || '-',
+    model: v.model || '-',
+    classification: v.vehicle_type || '-',
+    origin: v.country_origin || '-',
+    usedCountry: v.country_used || '-',
+    yom: v.yom || '-',
+    regNo: v.reg_no || '-',
+    regDate: '-',
+    engineNo: v.engine_no || '-',
+    fuelSystem: v.fuel_system || '-',
+    capacity: v.engine_capacity ? v.engine_capacity + ' CC' : '-',
+    chassisNo: v.chassis_no || '-',
+    fuelType: v.fuel_type || '-',
+    conversionDetails: '-',
+    keyNo: '-',
+    meterReading: v.meter_reading || '-',
+    meterUnit: v.meter_unit || '',
+    prevOwners: '-',
+    importers: '-',
+    importDate: '-',
+    clearingDate: '-',
+    color: v.body_color || '-',
+    justLow: '-',
+    seating: v.seating_cap || '-',
+    fourWheelDrive: v.differential_type || '-',
+    currentOwner: v.current_owner || '-',
+    compliance: v.complience_envir === '1' ? 'Yes' : (v.complience_envir === '0' ? 'No' : (v.complience_envir || '-')),
+    complianceComments: v.if_not_comments || '-',
+    roadTestDoneOn: v.road_test_done_on || '-',
+    roadTestNotDoneReason: '-', // Not in DB
+    fuelConsumption: v.fuel_consumption || '-',
+    sparesBodyParts: v.spares_body_parts || '-',
+    sparesEngineParts: v.spares_engine_parts || '-',
+    sparesAccessories: v.spares_accessories || '-',
+    extraOption: v.extra_options || '-'
+};
+
+const technical = {
+    gearBox: [v.transmission, v.gearbox_con].filter(Boolean).join(' - ') || '-',
+    clutch: [v.clutch_type, v.clutch_con].filter(Boolean).join(' - ') || '-',
+    shafting: [v.shaft_type, v.shaft_con].filter(Boolean).join(' - ') || '-',
+    differential: [v.differential_type, v.differential_con].filter(Boolean).join(' - ') || '-',
+    gearSelection: v.gearbox_con || '-',
+    suspensionFront: v.suspen_fr_con || '-',
+    suspensionRear: v.suspen_re_con || '-',
+    footBrakes: v.foot_brake_con || '-',
+    handBrakes: v.parking_brake_con || '-',
+    starter: v.starter_con || '-',
+    wipers: v.wiper_con || '-',
+    horn: v.horn_con || '-',
+    lights: v.light_con || '-',
+    meters: v.meter_con || '-',
+    alternator: v.alternator_con || '-',
+    steering: v.steering_con || '-',
+    chassisCond: v.chassis_con || '-',
+    bodyCond: v.body_con || '-',
+    engineCond: v.engine_con || '-',
+    engineStatus: v.engine_status || '-',
+    tireFrontSize: v.fr_size || '-',
+    tireFrontPct: v.tyre_front_type || '-',
+    tireRearSize: v.re_size || '-',
+    tireRearPct: v.tyre_rear_type || '-',
+    tireSpareSize: v.sp_size || '-',
+    tireSparePct: '-', // Not in DB
+    rearWheels: v.re_wheel || '-',
+    neededWithinYear: v.need_within_year || '-',
+    bodyPartsReplaced: v.body_parts_replaced || '-',
+    accident: v.accident || '-',
+    writeOff: v.write_off || '-',
+    majorRepairsComments: v.comments_1 || '-',
+    envCompliance: v.envir_reg === '1' ? 'Yes' : (v.envir_reg === '0' ? 'No' : (v.envir_reg || '-')),
+    envComplianceComments: v.comments_2 || '-',
+    maintMechanical: v.maint_mechanical_con || '-',
+    maintMirrors: v.pw_mirror_con || '-',
+    maintInternalTrim: v.inter_trim || '-',
+    optShutters: v.pw_shutter_con || '-',
+    optMirrors: v.pw_mirror_con || '-',
+    optAc: v.ac_con || '-',
+    doors: v.spares_doors || '-',
+    roofType: v.spares_roof_type || '-',
+    body: v.spares_body || '-',
+    adverseRemarks: v.test_comment || '-'
+};
+
+const valuation = { 
+    marketValue: v.market_value ? v.market_value.toLocaleString() : '0', 
+    marketValueWords: v.market_value ? capitalize(converter.toWords(v.market_value)) + ' only' : '', 
+    forcedValue: v.forced_value ? v.forced_value.toLocaleString() : '0', 
+    forcedValueWords: v.forced_value ? capitalize(converter.toWords(v.forced_value)) + ' only' : '' 
+};
+
+const getImgUrl = (p) => {
+    if (!p) return 'https://placehold.co/600x400?text=No+Image';
+    return p.startsWith('http') ? p : (p.startsWith('/') ? `http://localhost:8080${p}` : `http://localhost:8080/${p}`);
+};
+
+const images = {
+    img1: getImgUrl(v.image_paths?.[0]),
+    img2: getImgUrl(v.image_paths?.[1]),
+    img3: getImgUrl(v.image_paths?.[2]),
+    img4: getImgUrl(v.image_paths?.[3]),
+    img5: getImgUrl(v.image_paths?.[4])
+};
+---
+
+<ReportLayout title={`Valuation Report - ${vehicle.regNo}`}>
+    
+    <!-- PAGE 1 -->
+    <div class="a4-page">
+        <HeaderBanner meta={meta} />
+        <div style="padding: 0 15mm 10mm 10mm;">
+            <VehicleDetails vehicle={vehicle} images={images} />
+        </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="a4-page page-break">
+        <div style="padding: 5mm 15mm 15mm 10mm;">
+            <TechnicalEvaluation tech={technical} />
+            <SignatureBlock val={valuation} tech={technical} images={images} />
+        </div>
+    </div>
+
+</ReportLayout>

@@ -1,0 +1,1717 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Icon from '../../components/Icon.astro';
+---
+<DashboardLayout title="Add Valuation" subtitle="Multi-step vehicle valuation entry" role="user" activePage="add-valuation">
+
+  <div class="page-header">
+    <h1>Add New Valuation</h1>
+    <p>Complete all 5 steps to submit a vehicle valuation</p>
+  </div>
+
+  <!-- Step Bar -->
+  <div class="step-bar" id="stepBar">
+    <div class="step-item active" data-step="1" onclick="goTo(1)">
+      <div class="step-num">1</div><span>Vehicle Info</span>
+    </div>
+    <div class="step-item" data-step="2" onclick="goTo(2)">
+      <div class="step-num">2</div><span>Technical</span>
+    </div>
+    <div class="step-item" data-step="3" onclick="goTo(3)">
+      <div class="step-num">3</div><span>Road Test</span>
+    </div>
+    <div class="step-item" data-step="4" onclick="goTo(4)">
+      <div class="step-num">4</div><span>Valuation</span>
+    </div>
+    <div class="step-item" data-step="5" onclick="goTo(5)">
+      <div class="step-num">5</div><span>Photos</span>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="card" id="step-1">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:var(--primary-100);color:var(--primary-600);"><Icon name="car" /></div>
+        Step 1 - Vehicle Information &amp; Form Options
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="divider-label">Opinion &amp; Finance</div>
+      <div class="form-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="form-group">
+          <label>Opinion Provided To <span class="required">*</span></label>
+          <select class="form-control" name="sel_openion_provider">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Finance Company</label>
+          <select class="form-control" name="sel_finance">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Finance Branch</label>
+          <select class="form-control" name="sel_finance_branch">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Print Date</label>
+          <input type="date" class="form-control" name="txt_pin_date" />
+        </div>
+        <div class="form-group">
+          <label>Date and time of Inspection <span class="required">*</span></label>
+          <input type="datetime-local" class="form-control" name="txt_inspection_date" />
+        </div>
+        <div class="form-group">
+          <label>Place of Inspection</label>
+          <input type="text" class="form-control" name="txt_inspect_location" placeholder="Location" />
+        </div>
+        <div class="form-group">
+          <label>Yard</label>
+          <select class="form-control" name="sel_yard">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Branch</label>
+          <select class="form-control" name="sel_branch">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider-label">Vehicle Identification Details</div>
+      <div class="form-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="form-group">
+          <label>Chassis No. <span class="required">*</span></label>
+          <input type="text" class="form-control" name="txt_chassis_no" placeholder="Chassis number" />
+        </div>
+        <div class="form-group">
+          <label>If converted date</label>
+          <input type="date" class="form-control" name="txt_fuelconvert_date" />
+        </div>
+        <div class="form-group">
+          <label>Engine No. <span class="required">*</span></label>
+          <input type="text" class="form-control" name="txt_engine_no" placeholder="Engine number" />
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <input type="text" class="form-control" name="txt_type" placeholder="Type" />
+        </div>
+        <div class="form-group">
+          <label>Registration No. <span class="required">*</span></label>
+          <input type="text" class="form-control" name="txt_reg_no" placeholder="e.g. WP BIA-5292" />
+        </div>
+        <div class="form-group">
+          <label>Date of Import</label>
+          <input type="date" class="form-control" name="txt_import_date" />
+        </div>
+        <div class="form-group">
+          <label>Classification</label>
+          <select class="form-control" name="sel_vehicle_type">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date of Clearing</label>
+          <input type="date" class="form-control" name="txt_clear_date" />
+        </div>
+        <div class="form-group">
+          <label>Make <span class="required">*</span></label>
+          <select class="form-control" name="sel_make">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Country of Origin</label>
+          <select class="form-control" name="sel_country_origin">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Model <span class="required">*</span></label>
+          <input type="text" class="form-control" name="txt_model" placeholder="e.g. Corolla" />
+        </div>
+        <div class="form-group">
+          <label>Country of Used</label>
+          <select class="form-control" name="sel_country_used">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Engine Capacity (cc)</label>
+          <input type="text" class="form-control" name="txt_engine_capacity" placeholder="e.g. 1500" />
+        </div>
+        <div class="form-group">
+          <label>Year of Manufacture</label>
+          <input type="text" class="form-control" name="sel_yom" placeholder="e.g. 2019" maxlength="4" />
+        </div>
+        <div class="form-group">
+          <label>Switch Key No</label>
+          <input type="text" class="form-control" name="txt_switchkey_no" />
+        </div>
+        <div class="form-group">
+          <label>Type of Fuel</label>
+          <select class="form-control" name="sel_fuel_type">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Current Owner</label>
+          <input type="text" class="form-control" name="txt_curnowner" />
+        </div>
+        <div class="form-group">
+          <label>Body Color</label>
+          <select class="form-control" name="sel_color">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Meter Reading</label>
+          <div style="display:flex;gap:5px;">
+            <input type="text" class="form-control" name="txt_meter" placeholder="e.g. 85000" />
+            <select class="form-control no-choice" name="sel_analog" style="width:80px;">
+              <option value="KM">KM</option>
+              <option value="MI">MI</option>
+              <option value="HRS">HRS</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>No of Previous Owners</label>
+          <input type="text" class="form-control" name="txt_preowner" />
+        </div>
+        <div class="form-group">
+          <label>Just Low</label>
+          <select class="form-control" name="sel_justlow">
+            <option value="" disabled selected hidden>- Select -</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Importer</label>
+          <input type="text" class="form-control" name="txt_importer" />
+        </div>
+        <div class="form-group">
+          <label>4x4 Wheel Drive</label>
+          <select class="form-control" name="sel_4wd">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Seating Capacity</label>
+          <select class="form-control" name="sel_seat">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fuel System</label>
+          <select class="form-control" name="sel_fuel_sys">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date of Registration</label>
+          <input type="date" class="form-control" name="txt_date_reg" />
+        </div>
+        <div class="form-group">
+          <label>Gross Weight (kg)</label>
+          <input type="text" class="form-control" name="txt_grosweight" placeholder="e.g. 2500" />
+        </div>
+        <div class="form-group">
+          <label>Unladen Weight (kg)</label>
+          <input type="text" class="form-control" name="txt_unweight" placeholder="e.g. 1500" />
+        </div>
+        <div class="form-group">
+          <label>Type of Body</label>
+          <select class="form-control" name="sel_body_type">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>If dual purpose</label>
+          <input type="text" class="form-control" name="txt_dual" />
+        </div>
+      </div>
+
+
+
+      <div class="form-group full" style="margin-top:8px;">
+        <label>Extra Options / Remarks</label>
+        <div style="margin-bottom:8px;">
+          <select id="extraOptSelect" name="sel_extra[]" class="form-control" multiple>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="divider-label">Compliance</div>
+      <div class="form-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="form-group">
+          <label>Compliance of above (1.0-1.25) with CR</label>
+          <select class="form-control" name="sel_complience_envir">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>If No Comments</label>
+          <textarea class="form-control" name="txt_comments" placeholder="Comments if any..." rows="2"></textarea>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:20px;">
+        <button class="btn btn-primary btn-lg" onclick="goTo(2)">Next: Technical →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card" id="step-2" style="display:none;">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:var(--warning-100);color:#d97706;"><Icon name="wrench" /></div>
+        Step 2 - Technical Evaluation
+      </div>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:repeat(2, 1fr);column-gap:32px;">
+        {[
+          { label:'Gear box', fields:[{name:'sel_transmission'},{name:'sel_gearbox_con', label:'Gear selection'}]},
+          { label:'Electrical System', fields:[{name:'sel_starter'},{name:'sel_starter_con'}]},
+          { label:'Clutch', fields:[{name:'sel_clutch'},{name:'sel_clutch_con'}]},
+          { label:'Wiper', fields:[{name:'sel_wiper_type'},{name:'sel_wiper_con'}]},
+          { label:'Shafting', fields:[{name:'sel_shaft_type'},{name:'sel_shaft_con'}]},
+          { label:'Differential', fields:[{name:'sel_differential'},{name:'sel_differential_con'}]},
+          { label:'Horn', fields:[{name:'sel_horn_con'},{}]},
+          { label:'Lights', fields:[{name:'sel_light_con'},{}]},
+          { label:'Meter', fields:[{name:'sel_meter_con'},{}]},
+          { label:'Alternator', fields:[{name:'sel_alternator_con'},{}]},
+          { label:'Foot Brakes', fields:[{name:'sel_foot_brake'},{name:'sel_ftbrake_con'}]},
+          { label:'Parking Brakes', fields:[{},{name:'sel_pkbrake_con'}]},
+          { label:'Front Suspen.', fields:[{name:'sel_suspen_fr_type'},{name:'sel_suspen_fr_con'}]},
+          { label:'Rear Suspen.', fields:[{name:'sel_suspen_re_type'},{name:'sel_suspen_re_con'}]},
+          { label:'Steering', fields:[{name:'sel_steering'},{name:'sel_steering_con'}]},
+        ].map(row => (
+          <div style="display:grid;grid-template-columns:130px 1fr 1.5fr;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--neutral-100);">
+            <div style="font-size:.83rem;font-weight:500;color:var(--neutral-700);">{row.label}</div>
+            {row.fields.map(f => (
+              f.name ? (
+                <div class={f.label ? "choices-flex-container" : ""} style={f.label ? "display:flex;align-items:center;gap:8px;" : "display:block;"}>
+                  {f.label && <div style="font-size:.83rem;font-weight:500;color:var(--neutral-700);white-space:nowrap;">{f.label}</div>}
+                  <select class="form-control" name={f.name} style={f.label ? "flex:1;" : ""}>
+                    <option value="" disabled selected hidden>- Select -</option>
+                  </select>
+                </div>
+              ) : <div></div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <div class="divider-label" style="margin-top:16px;">Engine</div>
+      <div class="form-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="form-group">
+          <label>Engine Condition</label>
+          <select class="form-control" name="sel_engine_con">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Engine Status</label>
+          <select class="form-control" name="sel_engine_status">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Overhaul Done On</label>
+          <input type="text" class="form-control" name="txt_engine_overhaul" placeholder="e.g. 2021" />
+        </div>
+        <div class="form-group">
+          <label>Engine Replaced On</label>
+          <input type="date" class="form-control" name="txt_engine_replace" />
+        </div>
+
+        <div class="form-group">
+          <label>Chassis Condition</label>
+          <select class="form-control" name="sel_chassis_con">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider-label">Tyre &amp; Wheel Specifications</div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label>Tyre Type</label>
+          <select name="sel_tyre_type" id="sel_tyre_type" class="form-control">
+            <option value="Tyre" selected>Tyre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Wheel Type</label>
+          <select name="sel_wheel_type" id="sel_wheel_type" class="form-control">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group full" style="margin-top:16px;">
+        <label>Front Tyres</label>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; background:rgba(0,0,0,0.02); padding:12px; border-radius:8px; border:1px solid var(--neutral-200);">
+          <select name="sel_tyre_front_type" id="sel_tyre_front_type" class="form-control no-choice" style="width:140px;">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+          <select name="sel_tyrefr_meterial" id="sel_tyrefr_meterial" class="form-control no-choice" style="width:120px;">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+          <input name="txt_fr_size" id="txt_fr_size" class="form-control" placeholder="Size" style="width:100px;">
+          <input name="txt_fr_wheel" id="txt_fr_wheel" class="form-control" placeholder="Wheel" style="width:100px;">
+          <input name="txt_fr1" id="txt_fr1" class="form-control" placeholder="W1" style="width:60px;">
+          <input name="txt_fr2" id="txt_fr2" class="form-control" placeholder="W2" style="width:60px;">
+          <input name="txt_fr3" id="txt_fr3" class="form-control" placeholder="W3" style="width:60px;">
+          <input name="txt_fr4" id="txt_fr4" class="form-control" placeholder="W4" style="width:60px;">
+        </div>
+      </div>
+
+      <div class="form-group full" style="margin-top:8px;">
+        <label>Rear Tyres</label>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; background:rgba(0,0,0,0.02); padding:12px; border-radius:8px; border:1px solid var(--neutral-200);">
+          <select name="sel_tyre_rear_type" id="sel_tyre_rear_type" class="form-control no-choice" style="width:140px;">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+          <select name="sel_tyrere_meterial" id="sel_tyrere_meterial" class="form-control no-choice" style="width:120px;">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+          <input name="txt_re_size" id="txt_re_size" class="form-control" placeholder="Size" style="width:100px;">
+          <input name="txt_re_wheel" id="txt_re_wheel" class="form-control" placeholder="Wheel" style="width:100px;">
+          <input name="txt_re1" id="txt_re1" class="form-control" placeholder="W1" style="width:60px;">
+          <input name="txt_re2" id="txt_re2" class="form-control" placeholder="W2" style="width:60px;">
+          <input name="txt_re3" id="txt_re3" class="form-control" placeholder="W3" style="width:60px;">
+          <input name="txt_re4" id="txt_re4" class="form-control" placeholder="W4" style="width:60px;">
+          <input name="txt_re5" id="txt_re5" class="form-control" placeholder="W5" style="width:60px;">
+          <input name="txt_re6" id="txt_re6" class="form-control" placeholder="W6" style="width:60px;">
+          <input name="txt_re7" id="txt_re7" class="form-control" placeholder="W7" style="width:60px;">
+          <input name="txt_re8" id="txt_re8" class="form-control" placeholder="W8" style="width:60px;">
+        </div>
+      </div>
+
+      <div class="form-group full" style="margin-top:8px;">
+        <label>Spare Tyres</label>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; background:rgba(0,0,0,0.02); padding:12px; border-radius:8px; border:1px solid var(--neutral-200);">
+          <input name="txt_sp_size" id="txt_sp_size" class="form-control" placeholder="Size" style="width:100px;">
+          <input name="txt_sp_wheel" id="txt_sp_wheel" class="form-control" placeholder="Wheel" style="width:100px;">
+          <input name="txt_sp1" id="txt_sp1" class="form-control" placeholder="W1" style="width:60px;">
+          <input name="txt_sp2" id="txt_sp2" class="form-control" placeholder="W2" style="width:60px;">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:12px;">
+        <label>Special Features</label>
+        <textarea class="form-control" name="txt_special_feature" placeholder="List any special features..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button class="btn btn-secondary btn-lg" onclick="goTo(1)">← Previous</button>
+        <button class="btn btn-primary btn-lg" onclick="goTo(3)">Next: Road Test →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card" id="step-3" style="display:none;">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:var(--info-100);color:#0891b2;"><Icon name="trending" /></div>
+        Step 3 - Road Test &amp; Condition
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="form-group">
+          <label>Power Shutters</label>
+          <select class="form-control" name="sel_pwshutter_con">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Power Mirror</label>
+          <select class="form-control" name="sel_pwmirror_con">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>AC Type</label>
+          <select class="form-control" name="sel_air_type">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>AC Condition</label>
+          <select class="form-control" name="sel_ac_con">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+
+
+        <div class="form-group">
+          <label>Road test done on</label>
+          <input type="date" class="form-control" name="txt_road_test_done_on" />
+        </div>
+
+        <div class="form-group">
+          <label>Fuel Consumption (km/L)</label>
+          <input type="text" class="form-control" name="txt_fuel_consum" placeholder="e.g. 12" />
+        </div>
+
+        <div class="form-group">
+          <label>If Not Comments</label>
+          <textarea class="form-control" name="txt_if_not_comments"></textarea>
+        </div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:repeat(2,1fr);margin-top:8px;">
+        <div class="form-group">
+          <label>Need within a year</label>
+          <textarea class="form-control" name="txt_need_repair" placeholder="List repairs required..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Body parts replaced</label>
+          <textarea class="form-control" name="txt_body_repair" placeholder="Body repair details..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Accidents</label>
+          <textarea class="form-control" name="txt_accident" placeholder="Accident details if any..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Write off by insurers</label>
+          <textarea class="form-control" name="txt_insurers" placeholder=""></textarea>
+        </div>
+        <div class="form-group">
+          <label>Comments</label>
+          <textarea class="form-control" name="txt_repair_comment" placeholder=""></textarea>
+        </div>
+      </div>
+
+      <div class="divider-label" style="margin-top:16px;">Maintenance</div>
+      <div class="form-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="form-group">
+          <label>Mechanical</label>
+          <select class="form-control" name="sel_mechanical_maint">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="ASSEMBLED">ASSEMBLED</option>
+             <option value="Fair">Fair</option>
+             <option value="FAIR">FAIR</option>
+             <option value="Good">Good</option>
+             <option value="GOOD">GOOD</option>
+             <option value="INVALID CODE">INVALID CODE</option>
+             <option value="NEEDS UPDATING">NEEDS UPDATING</option>
+             <option value="Neglected">Neglected</option>
+             <option value="OUT OF WORK">OUT OF WORK</option>
+             <option value="Poor">Poor</option>
+             <option value="POOR">POOR</option>
+             <option value="Satisfied">Satisfied</option>
+             <option value="USED PARTS ASSEMBLED">USED PARTS ASSEMBLED</option>
+             <option value="Vinyl/Seats">Vinyl/Seats</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Batteries</label>
+          <select class="form-control" name="sel_batteries">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="1">1</option>
+             <option value="12V">12V</option>
+             <option value="12Vx2">12Vx2</option>
+             <option value="2">2</option>
+             <option value="24V">24V</option>
+             <option value="4">4</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Condition</label>
+          <select class="form-control" name="sel_vehicle_con">
+            <option value="" disabled selected hidden>-- Select --</option>
+            <option value="BOUGHT FROM AUCTION">BOUGHT FROM AUCTION</option>
+            <option value="BOUGHT FROM VEHICLE">BOUGHT FROM VEHICLE</option>
+            <option value="Brand New">Brand New</option>
+            <option value="BRAND NEW.L/ASSEMBLE">BRAND NEW.L/ASSEMBLE</option>
+            <option value="CONVERTED">CONVERTED</option>
+            <option value="INVALID CODE">INVALID CODE</option>
+            <option value="LAND VEHICLE">LAND VEHICLE</option>
+            <option value="LOCAL STAMPED">LOCAL STAMPED</option>
+            <option value="LOCALLY ASSEMBLED">LOCALLY ASSEMBLED</option>
+            <option value="LOCALLY BUILT">LOCALLY BUILT</option>
+            <option value="NEEDS UPDATING">NEEDS UPDATING</option>
+            <option value="NEW">NEW</option>
+            <option value="RE-CONDITIONED">RE-CONDITIONED</option>
+            <option value="Tractor -trailer">Tractor -trailer</option>
+            <option value="Used">Used</option>
+            <option value="USED PARTS ASSEMBLED">USED PARTS ASSEMBLED</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Body Maintenance</label>
+          <select class="form-control" name="sel_body_maint">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Interior Trim</label>
+          <select class="form-control" name="sel_intertrim">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Internal Trim condition</label>
+          <select class="form-control" name="sel_intertrim_con">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="Fair">Fair</option>
+             <option value="Fair Condition">Fair Condition</option>
+             <option value="Good">Good</option>
+             <option value="Good Condition">Good Condition</option>
+             <option value="Poor">Poor</option>
+             <option value="Poor Condition">Poor Condition</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Impact on government policies</label>
+          <select class="form-control" name="txt_gov_policy">
+            <option value="" disabled selected hidden>- Select -</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Compliance with environment regulation</label>
+          <select class="form-control" name="sel_complience_envir2">
+            <option value="" disabled selected hidden>- Select -</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Compliance Comments</label>
+          <textarea class="form-control" name="txt_complience_comment"></textarea>
+        </div>
+
+      </div>
+
+      <div class="divider-label" style="margin-top:16px;">Availability of spares</div>
+      <div class="form-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="form-group">
+          <label>Body</label>
+          <select class="form-control" name="sel_body_type" id="sel_body_type">
+            <option value="" disabled selected hidden>-- Select --</option>
+            <option value="3Wheeler Car">3Wheeler Car</option>
+            <option value="3Wheeler Truck">3Wheeler Truck</option>
+            <option value="ALLU.FULL BODY">ALLU.FULL BODY</option>
+            <option value="AZURE BLUE">AZURE BLUE</option>
+            <option value="blue silver aluminium">blue silver aluminium</option>
+            <option value="Boom Truck">Boom Truck</option>
+            <option value="BOOM TRUCK ( CRANE )">BOOM TRUCK ( CRANE )</option>
+            <option value="BOWSER">BOWSER</option>
+            <option value="BRONZE">BRONZE</option>
+            <option value="BULLDOZER">BULLDOZER</option>
+            <option value="BUS">BUS</option>
+            <option value="Cab &amp; Closed Aluminium Body">Cab &amp; Closed Aluminium Body</option>
+            <option value="Cab &amp; Closed Aluminium Freezer">Cab &amp; Closed Aluminium Freezer</option>
+            <option value="Cab &amp; Container Body">Cab &amp; Container Body</option>
+            <option value="Cab &amp; Steel Closed Container Body">Cab &amp; Steel Closed Container Body</option>
+            <option value="Cab and Chassis">Cab and Chassis</option>
+            <option value="CAB OVER">CAB OVER</option>
+            <option value="CASHMERE SILVER">CASHMERE SILVER</option>
+            <option value="CHRRY WHITE">CHRRY WHITE</option>
+            <option value="CLOSED">CLOSED</option>
+            <option value="Closed Aluminum Body (local)">Closed Aluminum Body (local)</option>
+            <option value="Closed Glass Panel">Closed Glass Panel</option>
+            <option value="Closed Wooden Body">Closed Wooden Body</option>
+            <option value="CONVERTIBLE">CONVERTIBLE</option>
+            <option value="COUPE CAR">COUPE CAR</option>
+            <option value="Cowl Cab &amp; Wooden Body">Cowl Cab &amp; Wooden Body</option>
+            <option value="CRANE">CRANE</option>
+            <option value="Crew Cab">Crew Cab</option>
+            <option value="D/CAB">D/CAB</option>
+            <option value="DOUBLE CAB">DOUBLE CAB</option>
+            <option value="Double Cab Pick Up">Double Cab Pick Up</option>
+            <option value="Dual Cover Freezer Fiber">Dual Cover Freezer Fiber</option>
+            <option value="DUAL PURPOSE">DUAL PURPOSE</option>
+            <option value="DUAL PURPOSE VAN">DUAL PURPOSE VAN</option>
+            <option value="DUMP TRUCK">DUMP TRUCK</option>
+            <option value="Dump Truck (Tipper) with 5 Drop side">Dump Truck (Tipper) with 5 Drop side</option>
+            <option value="Dumper Truck (Tipper)">Dumper Truck (Tipper)</option>
+            <option value="ESTATE CAR">ESTATE CAR</option>
+            <option value="Excavator">Excavator</option>
+            <option value="Fiber/Aluminium Body">Fiber/Aluminium Body</option>
+            <option value="Freezer Fiber Aluminium Body">Freezer Fiber Aluminium Body</option>
+            <option value="Freezer Fiber Body">Freezer Fiber Body</option>
+            <option value="FREEZER TRUCK">FREEZER TRUCK</option>
+            <option value="GARBAGE TRUCK">GARBAGE TRUCK</option>
+            <option value="GREY ALLUMINIUM">GREY ALLUMINIUM</option>
+            <option value="GRILL BODY">GRILL BODY</option>
+            <option value="GULLY BOWSER">GULLY BOWSER</option>
+            <option value="HALF BODY">HALF BODY</option>
+            <option value="HATCH BACK">HATCH BACK</option>
+            <option value="JCB">JCB</option>
+            <option value="JEEP">JEEP</option>
+            <option value="LAND VEHICLE">LAND VEHICLE</option>
+            <option value="Lorry Trailer Steel Flat Bed">Lorry Trailer Steel Flat Bed</option>
+            <option value="METAL FULL BODY">METAL FULL BODY</option>
+            <option value="Motor Coach">Motor Coach</option>
+            <option value="Motor Cycle Scooter">Motor Cycle Scooter</option>
+            <option value="NON AGRICULTURE LAND VEHICLE">NON AGRICULTURE LAND VEHICLE</option>
+            <option value="OMINI BUS">OMINI BUS</option>
+            <option value="OPEN">OPEN</option>
+            <option value="Open 3 Drop Side">Open 3 Drop Side</option>
+            <option value="Open 3 Drop Side with Canopy">Open 3 Drop Side with Canopy</option>
+            <option value="Open 3 Drop side with steel frame">Open 3 Drop side with steel frame</option>
+            <option value="Open 5 Drop Side">Open 5 Drop Side</option>
+            <option value="PLATFORM">PLATFORM</option>
+            <option value="Prime Mover">Prime Mover</option>
+            <option value="PRISTINE BLUE">PRISTINE BLUE</option>
+            <option value="Regional Development Bank">Regional Development Bank</option>
+            <option value="Saloon">Saloon</option>
+            <option value="SALOON">SALOON</option>
+            <option value="Saloon Hatch Back">Saloon Hatch Back</option>
+            <option value="Saloon Jeep">Saloon Jeep</option>
+            <option value="Saloon Jeep SAV">Saloon Jeep SAV</option>
+            <option value="Saloon Jeep SUV">Saloon Jeep SUV</option>
+            <option value="Saloon Notch Back">Saloon Notch Back</option>
+            <option value="SAV">SAV</option>
+            <option value="SEDAN">SEDAN</option>
+            <option value="Single Cab">Single Cab</option>
+            <option value="Single Cab Pick Up">Single Cab Pick Up</option>
+            <option value="Skeltal Flat Bed">Skeltal Flat Bed</option>
+            <option value="Standard Motor Cycle">Standard Motor Cycle</option>
+            <option value="STATION WAGON">STATION WAGON</option>
+            <option value="Station Wagon">Station Wagon</option>
+            <option value="Station Wagon (SAV)">Station Wagon (SAV)</option>
+            <option value="Steel Flat Bed">Steel Flat Bed</option>
+            <option value="Steel flat bed with Boom">Steel flat bed with Boom</option>
+            <option value="STEEL FRAME">STEEL FRAME</option>
+            <option value="STEEL FRAME WITH CANOPY">STEEL FRAME WITH CANOPY</option>
+            <option value="SUV">SUV</option>
+            <option value="TANKER">TANKER</option>
+            <option value="TEA LEAF">TEA LEAF</option>
+            <option value="TIPPING">TIPPING</option>
+            <option value="Tractor">Tractor</option>
+            <option value="Trail Motor Cycle">Trail Motor Cycle</option>
+            <option value="TRUCK">TRUCK</option>
+            <option value="TWO DOOR COUPE">TWO DOOR COUPE</option>
+            <option value="VEHICLE CARRIER">VEHICLE CARRIER</option>
+            <option value="VIOLET">VIOLET</option>
+            <option value="WAGON">WAGON</option>
+            <option value="WHEEL LOADER">WHEEL LOADER</option>
+            <option value="WHITE BLACK">WHITE BLACK</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Body Parts</label>
+          <select class="form-control" name="sel_body_part">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="Agents Only">Agents Only</option>
+             <option value="Available">Available</option>
+             <option value="Fair">Fair</option>
+             <option value="Not Available">Not Available</option>
+             <option value="Plenty">Plenty</option>
+             <option value="Poor">Poor</option>
+             <option value="Rare">Rare</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Doors</label>
+          <select class="form-control" name="sel_door">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="1">1</option>
+             <option value="2">2</option>
+             <option value="3">3</option>
+             <option value="4">4</option>
+             <option value="5">5</option>
+             <option value="6">6</option>
+             <option value="7">7</option>
+             <option value="Cowl Cab">Cowl Cab</option>
+             <option value="Open">Open</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Engine Parts</label>
+          <select class="form-control" name="sel_engine_part">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="Agents Only">Agents Only</option>
+             <option value="Available">Available</option>
+             <option value="Fair">Fair</option>
+             <option value="Not Available">Not Available</option>
+             <option value="Plenty">Plenty</option>
+             <option value="Poor">Poor</option>
+             <option value="Rare">Rare</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Roof type</label>
+          <select class="form-control" name="sel_roof">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="ALLUMINIUM FULL BODY">ALLUMINIUM FULL BODY</option>
+             <option value="CANOPY">CANOPY</option>
+             <option value="Canvas Top">Canvas Top</option>
+             <option value="FLAT">FLAT</option>
+             <option value="GLASS & METAL">GLASS & METAL</option>
+             <option value="High">High</option>
+             <option value="Moon Roof">Moon Roof</option>
+             <option value="OPEN">OPEN</option>
+             <option value="Panoramic sunroof">Panoramic sunroof</option>
+             <option value="Semi high">Semi high</option>
+             <option value="Standard">Standard</option>
+             <option value="STEEL BODY">STEEL BODY</option>
+             <option value="STEEL FRAME WITH CAN">STEEL FRAME WITH CAN</option>
+             <option value="Sun roof">Sun roof</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Accessories</label>
+          <select class="form-control" name="sel_access_part">
+             <option value="" disabled selected hidden>-- Select --</option>
+             <option value="Agents Only">Agents Only</option>
+             <option value="Available">Available</option>
+             <option value="Fair">Fair</option>
+             <option value="Not Available">Not Available</option>
+             <option value="Plenty">Plenty</option>
+             <option value="Poor">Poor</option>
+             <option value="Rare">Rare</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button class="btn btn-secondary btn-lg" onclick="goTo(2)">← Previous</button>
+        <button class="btn btn-primary btn-lg" onclick="goTo(4)">Next: Valuation →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="card" id="step-4" style="display:none;">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:var(--success-100);color:#16a34a;"><Icon name="dollar" /></div>
+        Step 4 - Valuation &amp; Final Details
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="form-group">
+          <label>Market Value (Rs.) <span class="required">*</span></label>
+          <input type="text" class="form-control" name="txt_market_value" placeholder="e.g. 3500000" id="mktVal" oninput="calcTotal()" />
+        </div>
+        <div class="form-group">
+          <label>VAT Status</label>
+          <select class="form-control" name="sel_vat">
+            <option value="" disabled selected hidden>- Select -</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Forced Value (Rs.)</label>
+          <input type="text" class="form-control" name="txt_forced_value" placeholder="If applicable" />
+        </div>
+        <div class="form-group" id="grp_value_amount">
+          <label>Valuation Amount (Rs.) <span class="required">*</span></label>
+          <input type="text" class="form-control" name="txt_value_amount" placeholder="e.g. 2500" id="valAmt" oninput="calcTotal()" />
+        </div>
+      </div>
+
+      <div id="submitMsg" style="display:none;margin-top:12px;"></div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button class="btn btn-secondary btn-lg" onclick="goTo(3)">← Previous</button>
+        <button class="btn btn-primary btn-lg" onclick="goTo(5)">Next: Photos →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 — Photos -->
+  <div class="card" id="step-5" style="display:none;">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:#f0fdf4;color:#16a34a;"><Icon name="camera" /></div>
+        Step 5 - Vehicle Photos
+      </div>
+    </div>
+    <div class="card-body">
+      <p style="color:var(--neutral-500);font-size:.88rem;margin-bottom:20px;">
+        Upload photos of the vehicle. Accepted formats: JPG, PNG, WebP.
+        Photos are saved to the server and attached to this valuation record.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;" id="photoGrid">
+        {[
+          {n:1, label:'Chassis Number',  icon:'Chassis.svg'},
+          {n:2, label:'Engine Number',   icon:'Engine.svg'},
+          {n:3, label:'Speedometer',     icon:'Speedometer.svg'},
+          {n:4, label:'Front View',      icon:'Car Front View.svg'},
+          {n:5, label:'Rear View',       icon:'Car Rear View.svg'},
+        ].map(slot => (
+          <div
+            class="photo-slot"
+            id={`slot-${slot.n}`}
+            style="position:relative;border:2px dashed var(--neutral-200);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--neutral-50);"
+            onclick={`if(event.target.tagName !== 'BUTTON') document.getElementById('img${slot.n}').click()`}
+          >
+            <button id={`remove-${slot.n}`} type="button" style="display:none;position:absolute;top:8px;right:8px;background:var(--danger-500, #ef4444);color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;z-index:10;align-items:center;justify-content:center;font-size:16px;line-height:1;" onclick={`removePhoto(${slot.n})`} title="Remove Photo">&times;</button>
+            <div style="margin-bottom:8px;display:flex;justify-content:center;color:var(--primary-500);">
+              <img src={`/icons/${slot.icon}`} style="width:40px;height:40px;object-fit:contain;" alt={slot.label} />
+            </div>
+            <div style="font-size:.82rem;font-weight:700;color:var(--neutral-700);margin-bottom:4px;">{slot.label}</div>
+            <div style="font-size:.72rem;color:var(--neutral-400);">Click to select</div>
+            <img id={`preview-${slot.n}`} style="display:none;width:100%;height:120px;object-fit:cover;border-radius:8px;margin-top:10px;" alt={`Preview ${slot.label}`} />
+            <div id={`fname-${slot.n}`} style="display:none;font-size:.7rem;color:var(--neutral-500);margin-top:6px;word-break:break-all;"></div>
+            <input type="file" id={`img${slot.n}`} name={`image${slot.n}`} accept=".jpg,.jpeg,.png,.webp" style="display:none;" onchange={`previewPhoto(${slot.n})`} />
+          </div>
+        ))}
+      </div>
+
+      <div id="submitMsg5" style="display:none;margin-top:16px;"></div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;">
+        <button class="btn btn-secondary btn-lg" onclick="goTo(4)">← Previous</button>
+        <button class="btn btn-success btn-lg" id="submitBtn" onclick="submitValuation()"><Icon name="check" size="16"/> Submit Valuation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cropper Modal -->
+  <div id="cropperModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:10000;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;border-radius:12px;width:100%;max-width:600px;overflow:hidden;display:flex;flex-direction:column;max-height:90vh;">
+      <div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="margin:0;font-size:1.1rem;color:#333;">Crop Image</h3>
+        <button id="cropperCancelBtn" style="background:none;border:none;font-size:1.5rem;cursor:pointer;line-height:1;">&times;</button>
+      </div>
+      <div style="padding:16px;flex:1;min-height:300px;background:#f9f9f9;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img id="cropperImage" style="max-width:100%;max-height:50vh;display:block;" />
+      </div>
+      <div style="padding:16px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:12px;">
+        <button class="btn btn-secondary" id="cropperCancelBtn2">Cancel</button>
+        <button class="btn btn-primary" id="cropperSaveBtn">Crop & Save</button>
+      </div>
+    </div>
+  </div>
+
+</DashboardLayout>
+<style is:global>
+  .card, .card-body, .form-grid, .form-group {
+    overflow: visible !important;
+  }
+
+  /* Force dropdown always downward — override Choices.js is-flipped behaviour */
+  .choices__list--dropdown,
+  .choices__list--dropdown.is-active {
+    top: 100% !important;
+    bottom: auto !important;
+    visibility: hidden;
+  }
+  .choices.is-open .choices__list--dropdown,
+  .choices__list--dropdown[aria-expanded="true"] {
+    visibility: visible !important;
+    display: block !important;
+    top: 100% !important;
+    bottom: auto !important;
+  }
+
+  /* Single scrollbar — only the inner list scrolls, not the outer wrapper */
+  .choices__list--dropdown {
+    overflow: hidden !important;
+  }
+  .choices__list--dropdown .choices__list {
+    max-height: 260px !important;
+    overflow-y: auto !important;
+  }
+</style>
+
+<script>
+const API = 'http://localhost:8080';
+let currentStep = 1;
+let createdValuationId = null;
+
+
+window.goTo = function(step) {
+  document.querySelectorAll('[id^="step-"]').forEach(el => el.style.display = 'none');
+  document.getElementById('step-' + step).style.display = '';
+  document.querySelectorAll('.step-item').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.className = 'step-item' + (s === step ? ' active' : s < step ? ' done' : '');
+    const num = el.querySelector('.step-num');
+    if (s < step) num.textContent = '✓';
+    else num.textContent = s;
+  });
+  currentStep = step;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.calcTotal = function() {}
+
+window.croppedImages = window.croppedImages || {};
+let currentCropper = null;
+let currentCropSlot = null;
+let currentCropFile = null;
+
+window.removePhoto = function(n) {
+  const fileInput = document.getElementById('img' + n);
+  if (fileInput) fileInput.value = '';
+  
+  if (window.croppedImages && window.croppedImages[n]) {
+    delete window.croppedImages[n];
+  }
+  
+  const preview = document.getElementById('preview-' + n);
+  const fname = document.getElementById('fname-' + n);
+  const slot = document.getElementById('slot-' + n);
+  const removeBtn = document.getElementById('remove-' + n);
+  
+  if (preview) { preview.src = ''; preview.style.display = 'none'; }
+  if (fname) { fname.textContent = ''; fname.style.display = 'none'; }
+  if (slot) {
+    slot.style.border = '2px dashed var(--neutral-200)';
+    slot.style.background = 'var(--neutral-50)';
+  }
+  if (removeBtn) removeBtn.style.display = 'none';
+}
+
+window.previewPhoto = function(n) {
+  const fileInput = document.getElementById('img' + n);
+  const file = fileInput.files[0];
+  if (!file) return;
+  
+  currentCropSlot = n;
+  currentCropFile = file;
+
+  const url = URL.createObjectURL(file);
+  const image = document.getElementById('cropperImage');
+  image.src = url;
+  
+  document.getElementById('cropperModal').style.display = 'flex';
+  
+  if (currentCropper) {
+    currentCropper.destroy();
+  }
+  
+  currentCropper = new Cropper(image, {
+    viewMode: 1,
+    autoCropArea: 1,
+    background: false,
+    zoomable: true,
+  });
+}
+
+function closeCropper() {
+  document.getElementById('cropperModal').style.display = 'none';
+  if (currentCropper) {
+    currentCropper.destroy();
+    currentCropper = null;
+  }
+  if (currentCropSlot) {
+     const fileInput = document.getElementById('img' + currentCropSlot);
+     if(fileInput) fileInput.value = '';
+  }
+}
+
+document.getElementById('cropperCancelBtn').addEventListener('click', closeCropper);
+document.getElementById('cropperCancelBtn2').addEventListener('click', closeCropper);
+
+document.getElementById('cropperSaveBtn').addEventListener('click', function() {
+  if (!currentCropper || !currentCropSlot) return;
+  
+  const canvas = currentCropper.getCroppedCanvas();
+  if (!canvas) return;
+
+  canvas.toBlob(function(blob) {
+    const n = currentCropSlot;
+    window.croppedImages[n] = blob;
+    
+    const preview = document.getElementById('preview-' + n);
+    const fname   = document.getElementById('fname-' + n);
+    const slot    = document.getElementById('slot-' + n);
+    
+    preview.src = URL.createObjectURL(blob);
+    preview.style.display = 'block';
+    fname.textContent = currentCropFile.name + ' (Cropped)';
+    fname.style.display = 'block';
+    slot.style.border = '2px solid var(--primary-500)';
+    slot.style.background = '#fff';
+    
+    const removeBtn = document.getElementById('remove-' + n);
+    if (removeBtn) removeBtn.style.display = 'flex';
+    
+    closeCropper();
+  }, 'image/jpeg', 0.9);
+});
+
+window.showMsg = function(type, text, id) {
+  const msg = document.getElementById(id || 'submitMsg5');
+  const color = type === 'success' ? '#16a34a' : '#dc2626';
+  const bg    = type === 'success' ? '#f0fdf4'  : '#fef2f2';
+  const border= type === 'success' ? '#bbf7d0'  : '#fecaca';
+  msg.innerHTML = `<div style="padding:14px 18px;border-radius:8px;background:${bg};border:1px solid ${border};color:${color};font-weight:500;">${text}</div>`;
+  msg.style.display = 'block';
+}
+
+window.submitValuation = async function() {
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('submitMsg5');
+  btn.disabled = true;
+  btn.textContent = '⏳ Submitting...';
+  msg.style.display = 'none';
+
+  const g = id => document.querySelector(`[name="${id}"]`)?.value || '';
+
+  const payload = {
+    reg_no:           g('txt_reg_no'),
+    chassis_no:       g('txt_chassis_no'),
+    engine_no:        g('txt_engine_no'),
+    make:             g('sel_make'),
+    model:            g('txt_model'),
+    yom:              parseInt(g('sel_yom')) || 0,
+    country_origin:   g('sel_country_origin'),
+    country_used:     g('sel_country_used'),
+    engine_capacity:  g('txt_engine_capacity'),
+    fuel_type:        g('sel_fuel_type'),
+    body_color:       g('sel_color'),
+    meter_reading:    g('txt_meter'),
+    meter_unit:       g('sel_analog'),
+    current_owner:    g('txt_curnowner'),
+    seating_cap:      parseInt(g('sel_seat')) || 0,
+    transmission:     g('sel_transmission'),
+    gearbox_con:      g('sel_gearbox_con'),
+    engine_con:       g('sel_engine_con'),
+    engine_status:    g('sel_engine_status'),
+    overhaul_done:    g('txt_engine_overhaul'),
+    body_con:         g('sel_body_con'),
+    chassis_con:      g('sel_chassis_con'),
+    vehicle_con:      g('sel_vehicle_con'),
+    vehicle_type:     g('sel_vehicle_type'),
+    body_type:        g('sel_body_type'),
+    air_type:         g('sel_air_type'),
+    ac_con:           g('sel_ac_con'),
+    steering:         g('sel_steering'),
+    steering_con:     g('sel_steering_con'),
+    fuel_system:      g('sel_fuel_sys'),
+    road_test_done_on: g('txt_road_test_done_on'),
+    if_not_comments:  g('txt_if_not_comments'),
+
+    differential_type: g('sel_differential'),
+    differential_con:  g('sel_differential_con'),
+    light_con:         g('sel_light_con'),
+    meter_con:         g('sel_meter_con'),
+    alternator_con:    g('sel_alternator_con'),
+    starter_type:      g('sel_starter'),
+    starter_con:       g('sel_starter_con'),
+    clutch_type:       g('sel_clutch'),
+    clutch_con:        g('sel_clutch_con'),
+    wiper_type:        g('sel_wiper_type'),
+    wiper_con:         g('sel_wiper_con'),
+    shaft_type:        g('sel_shaft_type'),
+    shaft_con:         g('sel_shaft_con'),
+    horn_con:          g('sel_horn_con'),
+    foot_brake_type:   g('sel_foot_brake'),
+    foot_brake_con:    g('sel_ftbrake_con'),
+    parking_brake_con: g('sel_pkbrake_con'),
+    suspen_fr_type:    g('sel_suspen_fr_type'),
+    suspen_fr_con:     g('sel_suspen_fr_con'),
+    suspen_re_type:    g('sel_suspen_re_type'),
+    suspen_re_con:     g('sel_suspen_re_con'),
+    pw_shutter_con:    g('sel_pwshutter_con'),
+    pw_mirror_con:     g('sel_pwmirror_con'),
+    body_maint:        g('sel_body_maint'),
+    inter_trim:        g('sel_intertrim'),
+    test_type:         g('sel_test_type'),
+    complience_envir:  g('sel_complience_envir'),
+    tyre_type:         g('sel_tyre_type'),
+    wheel_type:        g('sel_wheel_type'),
+      tyre_front_type:   g('sel_tyre_front_type'),
+      tyrefr_meterial:   g('sel_tyrefr_meterial'),
+      fr_size:           g('txt_fr_size'),
+      fr_wheel:          g('txt_fr_wheel'),
+      fr1:               g('txt_fr1'),
+      fr2:               g('txt_fr2'),
+      fr3:               g('txt_fr3'),
+      fr4:               g('txt_fr4'),
+      tyre_rear_type:    g('sel_tyre_rear_type'),
+      tyrere_meterial:   g('sel_tyrere_meterial'),
+      re_size:           g('txt_re_size'),
+      re_wheel:          g('txt_re_wheel'),
+      re1:               g('txt_re1'),
+      re2:               g('txt_re2'),
+      re3:               g('txt_re3'),
+      re4:               g('txt_re4'),
+      re5:               g('txt_re5'),
+      re6:               g('txt_re6'),
+      re7:               g('txt_re7'),
+      sp_size:           g('txt_sp_size'),
+      sp_wheel:          g('txt_sp_wheel'),
+      sp1:               g('txt_sp1'),
+      sp2:               g('txt_sp2'),
+
+    fuel_consumption: g('txt_fuel_consum'),
+    market_value:     parseFloat(g('txt_market_value').replace(/,/g, '')) || 0,
+    forced_value:     parseFloat(g('txt_forced_value').replace(/,/g, '')) || 0,
+    val_amount:       parseFloat(g('txt_value_amount').replace(/,/g, '')) || 0,
+    vat:              g('sel_vat') === 'yes',
+    branch:           g('sel_branch'),
+    inspection_date:  g('txt_inspection_date'),
+    pin_date:         g('txt_pin_date'),
+    finance_company:  g('sel_finance'),
+    finance_branch:   g('sel_finance_branch'),
+    opinion_to:       g('sel_openion_provider'),
+    yard:             g('sel_yard'),
+    inspect_location: g('txt_inspect_location'),
+    test_comment:     g('txt_test_comment'),
+    special_feature:  g('txt_special_feature'),
+    need_repair:      g('txt_need_repair'),
+    body_repair:      g('txt_body_repair'),
+    accident:         g('txt_accident'),
+    envir_reg:         g('sel_complience_envir2'),
+    comments_2:        g('txt_complience_comment'),
+    extra_options:    Array.from(document.querySelectorAll('[name="sel_extra[]"] option:checked')).map(el => el.value).join(', '),
+    need_within_year:  g('txt_need_repair'),
+    body_parts_replaced: g('txt_body_repair'),
+    write_off:         g('txt_insurers'),
+    comments_1:        g('txt_repair_comment'),
+    maint_mechanical:  g('sel_mechanical_maint'),
+    inter_trim_con:    g('sel_intertrim_con'),
+    maint_batteries:   g('sel_batteries'),
+    spares_body_parts: g('sel_body_part'),
+    spares_body_type:  g('sel_body_type'),
+    spares_doors:      g('sel_door'),
+    spares_engine_parts: g('sel_engine_part'),
+    spares_roof_type:  g('sel_roof'),
+    spares_accessories: g('sel_access_part'),
+    gov_policy:         g('txt_gov_policy'),
+    status:             'Pending',
+    image_paths:      ['','','','',''],
+  };
+
+  if (!payload.reg_no || !payload.make) {
+    showMsg('error', '✗ Registration number and make are required (Step 1).');
+    btn.disabled = false;
+    btn.textContent = 'Submit Valuation';
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem('aw_token') || '';
+    const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get('edit');
+    const endpoint = editId ? `${API}/api/valuations/${editId}` : `${API}/api/valuations`;
+    const method = editId ? 'PUT' : 'POST';
+
+    const res = await fetch(endpoint, {
+      method,
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || 'Submission failed');
+
+    createdValuationId = editId || data.data?.id;
+
+    // Upload images if any selected
+    const fd = new FormData();
+    let hasImages = false;
+    for (let i = 1; i <= 5; i++) {
+      let file = (window.croppedImages && window.croppedImages[i]) ? window.croppedImages[i] : null;
+      if (!file) {
+        file = document.getElementById('img' + i)?.files[0];
+      }
+      if (file) { 
+        fd.append('image' + i, file, file instanceof Blob && !file.name ? `image${i}.jpg` : file.name); 
+        hasImages = true; 
+      }
+    }
+    if (hasImages && createdValuationId) {
+      await fetch(`${API}/api/valuations/${createdValuationId}/images`, {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: fd,
+      });
+    }
+
+    showMsg('success', `✓ Valuation #${createdValuationId} ${editId ? 'updated' : 'submitted'}! Redirecting…`);
+    setTimeout(() => window.location.href = '/user/valuations', 2000);
+  } catch (e) {
+    showMsg('error', '✗ ' + e.message);
+    btn.disabled = false;
+    btn.textContent = 'Submit Valuation';
+  }
+}
+
+// ── Dropdown options from backend ──────────────────────────
+
+const userExtraOptions = [
+  "Multifunction Steering Wheel","-","2 RAW ADJ SEATS","2 RAW VELVOT ADJ/SEATS","2 ROW AJ/SEATS","2 Rows Passenger Seats","3 / 2 Seats","3 Rows Adjustable Seats","3 Rows Passenger seats","3 TV MONITOR","3 Way Reveres Camera","3rd MIRROR","4 AIR BAG","4 Jacks","4 Rows Passenger Seats","6 AIR BAGS","8 AIR BAGS","8 SRS","9 AIR BAG","A/C SINGAL","ABS","ADJ SEATS","AIR BAG","Air Bag 1","Air Bag 2","Air bag 8","ALLOY WHEELS","BACK CAMARA","BEAIGE INTEERIAL","BODY KIT","BOTTLE COOLER","CD Changer","CD Player","CD Player N/W","Center Locking","COOL BOX","CORNER ANGAL HEAD LIGHT","CRUISE CONTROL","CRYSTEL LIGHT","CUP HOLDER","Cut Glass","D/SUN ROOF","DIGITAL TAXI MEETER","DUAL AC","DUAL LAYER CANNOPY","DVD","E/SUN ROOF","Electric Seats","Electric Seats(Not Working)","F/BODY KIT","Fog Lamps","Foot Board","FULL CUSHION SEATS","FULL SEETS","Fully Lorded","GOLD BADCH","HEAD REST SEETS","Hood Rack","Hood Railing","Hurricane Air Filter","Hyva Bucket","Intelegent Key","LAND VEHICLE","LETHER ELET/SEATS","LINE AC","MOTOR COACH","Multi Function Steering Wheel","ORANGE PACKAGE","P/CURTAIN","PANAL AC","POWER STEERING","Push Start","R/EMER/DOOR","R/LADDER","R/MIRROR","R/R MUDARD GARD","R/Spoiler","Radio","Rear Heater","Rear Mirror","Rear Spoiler","Rear Wiper","Remote Key","Reveres Camera","Reverse Sensor","RTC/ MIRROR","S/S MIDDLE FRAM","SEMI M/F/STEERING","side mirror wiper& washers","Side Step","single air bag","Single Row Passenger Seats","Sleeper Cab","Smart Key","Snookel","SPORT STEERING","SRS","STEEL MODIFICATION","Stereo","Stereo Cassette","Sub Woofers","Sun Roof","Tandem Axle","Tandem Drive","TAXI METER","TEAK INTIRIAL","TEAK PANEL","Tendom Drive","TURBO","TURBO INTERCOOLER","TURBO TIMER","TV","USB Player","VX","W/MIRROR","Winker Mirrors","XURBAN CONDITION","XURBAN MODEL"
+];
+
+const mapOptionsToSelects = {
+  'sel_openion_provider': 'Opinion provider',
+  'sel_finance': 'Finance Company',
+  'sel_finance_branch': 'Finance Branch',
+  'sel_make': 'Make Details',
+  'sel_country_origin': 'Countries',
+  'sel_country_used': 'Countries',
+  'sel_fuel_type': 'Fuel Types',
+  'sel_color': 'Body Color',
+  'sel_seat': 'Seat Data',
+  'sel_fuel_sys': 'Fuel System',
+  'sel_yard': 'Yard Details',
+  'sel_branch': 'Finance Branch',
+  'sel_vat': 'VAT Status',
+  'sel_transmission': 'sel_transmission',
+  'sel_gearbox_con': 'sel_gearsel_con',
+  'sel_wheel_type': 'wheel_type',
+  'sel_tyre_front_type': 'tyre_front_type',
+  'sel_tyrefr_meterial': 'tyrefr_meterial',
+  'sel_tyre_rear_type': 'tyre_rear_type',
+  'sel_tyrere_meterial': 'tyrere_meterial',
+  'sel_starter': 'Starter Types',
+  'sel_starter_con': 'Electrical Condition',
+  'sel_clutch': 'Clutch type',
+  'sel_clutch_con': 'Clutch Conditions',
+  'sel_wiper_type': 'Wiper Type',
+  'sel_wiper_con': 'Option Condition',
+  'sel_shaft_type': 'Suspension Type',
+  'sel_shaft_con': 'Suspension Conditions',
+  'sel_differential': 'sel_different_type',
+  'sel_differential_con': 'sel_different_con',
+  'sel_horn_con': 'sel_horn_con',
+  'sel_light_con': 'sel_light_con',
+  'sel_meter_con': 'sel_meter_con',
+  'sel_alternator_con': 'sel_alternator_con',
+  'sel_foot_brake': 'Brake Type',
+  'sel_ftbrake_con': 'Brake Conditions',
+  'sel_pkbrake_con': 'Brake Conditions',
+  'sel_steering': 'Steering Types',
+  'sel_steering_con': 'Option Condition',
+  'sel_suspen_fr_type': 'Suspension Type',
+  'sel_suspen_fr_con': 'Suspension Conditions',
+  'sel_suspen_re_type': 'Suspension Type',
+  'sel_suspen_re_con': 'Suspension Conditions',
+  'sel_engine_con': 'Maintain Conditions',
+  'sel_engine_status': 'Vehicle Condition',
+  'sel_body_con': 'Body Conditions',
+  'sel_chassis_con': 'Maintain Conditions',
+  'sel_pwshutter_con': 'Option Condition',
+  'sel_pwmirror_con': 'Option Condition',
+  'sel_air_type': 'sel_body_work',
+  'sel_ac_con': 'sel_ac_con',
+  'sel_body_maint': 'Maintain Conditions',
+  'sel_vehicle_con': 'Vehicle Condition',
+  'sel_intertrim': 'Interior Types',
+  'sel_intertrim_con': 'Option Condition',
+  'sel_vehicle_type': 'Types of Vehicle',
+  'sel_body_type': 'Body type',
+  'sel_test_type': 'Test Types',
+  'sel_complience_envir': 'Option Condition',
+  'sel_inspection': 'Inspectors',
+};
+
+async function loadFormOptions() {
+  try {
+    const token = localStorage.getItem('aw_token');
+    const res = await fetch(`${API}/api/options`, { headers: { 'Authorization': 'Bearer ' + token }});
+    if (!res.ok) return;
+    const json = await res.json();
+    const allOptions = json.data || [];
+
+    // Populate Extra Options select
+    const extraSel = document.getElementById('extraOptSelect');
+    if (extraSel) {
+      userExtraOptions.sort().forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt;
+        o.textContent = opt;
+        extraSel.appendChild(o);
+      });
+    }
+
+    // Group options by type
+    const grouped = {};
+    for (const opt of allOptions) {
+      const typeKey = String(opt.option_type || '').trim();
+      if (!typeKey) continue;
+      if (!grouped[typeKey]) grouped[typeKey] = [];
+      grouped[typeKey].push(opt);
+    }
+
+    // Sort each group
+    Object.keys(grouped).forEach(k => grouped[k].sort((a,b) => (a.sort_order||0) - (b.sort_order||0)));
+
+    // Populate dropdowns dynamically
+    const allSelectsToPopulate = document.querySelectorAll('select.form-control:not(#extraOptSelect):not(.no-choice)');
+    let popCount = 0;
+    allSelectsToPopulate.forEach(sel => {
+      const name = String(sel.getAttribute('name') || '').trim();
+      if (!name) return;
+      const fld = mapOptionsToSelects[name] || name;
+      const list = grouped[fld] || grouped[name];
+      if (list && list.length > 0) {
+        if (sel.choicesInstance) {
+          const choicesArr = list.map(opt => ({
+            value: opt.value,
+            label: (opt.label || opt.value) === 'Dismentaled' ? 'Dismantled' : (opt.label || opt.value)
+          }));
+          choicesArr.unshift({
+            value: '',
+            label: '- Select -',
+            selected: true,
+            disabled: true,
+            placeholder: true
+          });
+          sel.choicesInstance.clearChoices();
+          sel.choicesInstance.setChoices(choicesArr, 'value', 'label', true);
+        } else {
+          sel.innerHTML = '<option value="" disabled selected hidden>- Select -</option>';
+          list.forEach(opt => {
+            const o = document.createElement('option');
+            o.value = opt.value;
+            let displayLabel = opt.label || opt.value;
+            if (displayLabel === 'Dismentaled') displayLabel = 'Dismantled';
+            o.textContent = displayLabel;
+            sel.appendChild(o);
+          });
+        }
+        popCount++;
+      }
+    });
+
+    if (popCount === 0 && allOptions.length > 0) {
+      document.body.insertAdjacentHTML('afterbegin', '<div style="background:red;color:white;padding:15px;position:fixed;top:0;left:0;width:100%;z-index:99999;">ERROR: API returned ' + allOptions.length + ' options but none matched the HTML fields.</div>');
+    }
+
+    // Initialize Choices.js on Extra Options
+    const extraSelEl = document.getElementById('extraOptSelect');
+    if (extraSelEl && !extraSelEl.hasAttribute('data-choice')) {
+      window.extraOptChoices = new Choices(extraSelEl, {
+        searchEnabled: true,
+        removeItemButton: true,
+        shouldSort: false
+      });
+    }
+
+    // Initialize Choices.js on all other selects to force dropdown downwards
+    const allSelects = document.querySelectorAll('select.form-control:not(#extraOptSelect):not(.no-choice)');
+    allSelects.forEach(sel => {
+      if (!sel.hasAttribute('data-choice')) {
+        const choiceInst = new Choices(sel, {
+          searchEnabled: true,
+          itemSelectText: '',
+          shouldSort: false,
+          placeholder: true,
+          removeItemButton: true,
+          placeholderValue: '- Select -'
+        });
+        sel.choicesInstance = choiceInst;
+      }
+    });
+
+  } catch(e) {
+    console.error('Error loading form options', e);
+    document.body.insertAdjacentHTML('afterbegin', '<div style="background:red;color:white;padding:15px;position:fixed;top:0;left:0;width:100%;z-index:99999;">JS ERROR in loadFormOptions: ' + e.message + '</div>');
+  }
+}
+
+async function loadExistingValuation(user) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const vId = urlParams.get('edit') || urlParams.get('view') || urlParams.get('print');
+  if (!vId) return;
+
+  let mode = urlParams.get('edit') ? 'edit' : urlParams.get('print') ? 'print' : 'view';
+
+  try {
+    const token = localStorage.getItem('aw_token') || '';
+    const res = await fetch(`${API}/api/valuations/${vId}`, { headers: { 'Authorization': 'Bearer ' + token }});
+    const data = await res.json();
+    if (!data.success || !data.data) return;
+
+    const v = data.data;
+
+    if (mode === 'edit') {
+      if (user && user.role !== 'admin' && v.status === 'Approved') {
+        alert('Approved valuations cannot be edited.');
+        window.location.href = '/user/valuations';
+        return;
+      }
+      document.querySelector('.page-header h1').textContent = `Edit Valuation #${vId}`;
+      const sb = document.getElementById('submitBtn');
+      if (sb) sb.textContent = 'Update Valuation';
+    } else {
+      document.querySelector('.page-header h1').textContent = `Valuation Report #${vId}`;
+      const sb = document.getElementById('submitBtn');
+      if (sb) sb.style.display = 'none';
+    }
+
+    const setVal = (name, val) => {
+      const el = document.querySelector(`[name="${name}"]`);
+      if (el) {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          if (el.value === String(val)) el.checked = true;
+        } else {
+          el.value = val || '';
+          if (el.choicesInstance) {
+            el.choicesInstance.setChoiceByValue(val || '');
+          }
+        }
+      }
+    };
+
+    setVal('txt_reg_no', v.reg_no);
+    setVal('txt_chassis_no', v.chassis_no);
+    setVal('txt_engine_no', v.engine_no);
+    setVal('sel_make', v.make);
+    setVal('txt_model', v.model);
+    setVal('sel_yom', v.yom);
+    setVal('sel_country_origin', v.country_origin);
+    setVal('sel_country_used', v.country_used);
+    setVal('txt_engine_capacity', v.engine_capacity);
+    setVal('sel_fuel_type', v.fuel_type);
+    setVal('sel_color', v.body_color);
+    setVal('txt_meter', v.meter_reading);
+    setVal('sel_analog', v.meter_unit || 'KM');
+    setVal('txt_curnowner', v.current_owner);
+    setVal('sel_seat', v.seating_cap);
+    setVal('sel_transmission', v.transmission);
+    setVal('sel_gearbox_con', v.gearbox_con);
+    setVal('sel_engine_con', v.engine_con);
+    setVal('sel_engine_status', v.engine_status);
+    setVal('txt_engine_overhaul', v.overhaul_done);
+    setVal('sel_body_con', v.body_con);
+    setVal('sel_chassis_con', v.chassis_con);
+    setVal('sel_vehicle_con', v.vehicle_con);
+    setVal('sel_vehicle_type', v.vehicle_type);
+    setVal('sel_body_type', v.body_type);
+    setVal('sel_air_type', v.air_type);
+    setVal('sel_ac_con', v.ac_con);
+    setVal('sel_steering', v.steering);
+    setVal('sel_steering_con', v.steering_con);
+    setVal('sel_fuel_sys', v.fuel_system);
+
+    setVal('sel_differential', v.differential_type);
+    setVal('sel_differential_con', v.differential_con);
+    setVal('sel_light_con', v.light_con);
+    setVal('sel_meter_con', v.meter_con);
+    setVal('sel_alternator_con', v.alternator_con);
+    setVal('sel_starter', v.starter_type);
+    setVal('sel_starter_con', v.starter_con);
+    setVal('sel_clutch', v.clutch_type);
+    setVal('sel_clutch_con', v.clutch_con);
+    setVal('sel_wiper_type', v.wiper_type);
+    setVal('sel_wiper_con', v.wiper_con);
+    setVal('sel_shaft_type', v.shaft_type);
+    setVal('sel_shaft_con', v.shaft_con);
+    setVal('sel_horn_con', v.horn_con);
+    setVal('sel_foot_brake', v.foot_brake_type);
+    setVal('sel_ftbrake_con', v.foot_brake_con);
+    setVal('sel_pkbrake_con', v.parking_brake_con);
+    setVal('sel_suspen_fr_type', v.suspen_fr_type);
+    setVal('sel_suspen_fr_con', v.suspen_fr_con);
+    setVal('sel_suspen_re_type', v.suspen_re_type);
+    setVal('sel_suspen_re_con', v.suspen_re_con);
+    setVal('sel_pwshutter_con', v.pw_shutter_con);
+    setVal('sel_pwmirror_con', v.pw_mirror_con);
+    setVal('sel_body_maint', v.body_maint);
+    setVal('sel_intertrim', v.inter_trim);
+    setVal('sel_intertrim_con', v.inter_trim_con);
+    setVal('sel_test_type', v.test_type);
+    setVal('sel_complience_envir', v.complience_envir);
+    setVal('sel_tyre_type', v.tyre_type);
+    setVal('sel_complience_envir2', v.envir_reg);
+    setVal('txt_complience_comment', v.comments_2);
+    setVal('customer_name', v.customer_name);
+    setVal('sel_wheel_type', v.wheel_type);
+      setVal('sel_tyre_front_type', v.tyre_front_type);
+      setVal('sel_tyrefr_meterial', v.tyrefr_meterial);
+      setVal('txt_fr_size', v.fr_size);
+      setVal('txt_fr_wheel', v.fr_wheel);
+      setVal('txt_fr1', v.fr1);
+      setVal('txt_fr2', v.fr2);
+      setVal('txt_fr3', v.fr3);
+      setVal('txt_fr4', v.fr4);
+
+      setVal('sel_tyre_rear_type', v.tyre_rear_type);
+      setVal('sel_tyrere_meterial', v.tyrere_meterial);
+      setVal('txt_re_size', v.re_size);
+      setVal('txt_re_wheel', v.re_wheel);
+      setVal('txt_re1', v.re1);
+      setVal('txt_re2', v.re2);
+      setVal('txt_re3', v.re3);
+      setVal('txt_re4', v.re4);
+      setVal('txt_re5', v.re5);
+      setVal('txt_re6', v.re6);
+      setVal('txt_re7', v.re7);
+
+      setVal('txt_sp_size', v.sp_size);
+      setVal('txt_sp_wheel', v.sp_wheel);
+      setVal('txt_sp1', v.sp1);
+      setVal('txt_sp2', v.sp2);
+
+    setVal('txt_fuel_consum', v.fuel_consumption);
+    setVal('txt_market_value', v.market_value);
+    setVal('txt_forced_value', v.forced_value);
+    setVal('txt_value_amount', v.val_amount);
+    setVal('sel_vat', v.vat ? 'yes' : 'no');
+    setVal('sel_branch', v.branch);
+    setVal('sel_yard', v.yard);
+    setVal('txt_inspect_location', v.inspect_location);
+    if (v.inspection_date) setVal('txt_inspection_date', v.inspection_date.split('T')[0]);
+    if (v.pin_date) setVal('txt_pin_date', v.pin_date.split('T')[0]);
+    setVal('sel_finance', v.finance_company);
+    setVal('sel_finance_branch', v.finance_branch);
+    setVal('sel_openion_provider', v.opinion_to);
+    setVal('txt_test_comment', v.test_comment);
+    setVal('txt_special_feature', v.special_feature);
+
+    setVal('txt_need_repair', v.need_within_year);
+    setVal('txt_body_repair', v.body_parts_replaced);
+    setVal('txt_insurers', v.write_off);
+    setVal('txt_repair_comment', v.comments_1);
+    setVal('sel_mechanical_maint', v.maint_mechanical);
+    setVal('sel_mechanical_maint_con', v.maint_mechanical_con);
+    setVal('sel_batteries', v.maint_batteries);
+    setVal('sel_body_part', v.spares_body_parts);
+    setVal('sel_body_type', v.spares_body_type);
+    setVal('sel_door', v.spares_doors);
+    setVal('sel_engine_part', v.spares_engine_parts);
+    setVal('sel_roof', v.spares_roof_type);
+    setVal('sel_access_part', v.spares_accessories);
+    setVal('txt_gov_policy', v.gov_policy);
+    setVal('txt_accident', v.accident);
+    setVal('txt_complience_comment', v.complience_comment);
+
+
+    // Handle Choices.js extra options
+    if (v.extra_options && window.extraOptChoices) {
+      window.extraOptChoices.setChoiceByValue(v.extra_options.split(',').map(s => s.trim()));
+    }
+
+    // Load existing images
+    if (v.image_paths && Array.isArray(v.image_paths)) {
+      v.image_paths.forEach((p, i) => {
+        if (p) {
+          const n = i + 1;
+          const preview = document.getElementById('preview-' + n);
+          const fname = document.getElementById('fname-' + n);
+          const slot = document.getElementById('slot-' + n);
+          const removeBtn = document.getElementById('remove-' + n);
+          
+          if (preview) {
+            const imgSrc = p.startsWith('http') ? p : (p.startsWith('/') ? `${API}${p}` : `${API}/${p}`);
+            preview.src = imgSrc;
+            preview.style.display = 'block';
+            if (fname) {
+              fname.textContent = p.split('/').pop() || 'image.jpg';
+              fname.style.display = 'block';
+            }
+            if (slot) {
+              slot.style.border = '2px solid var(--primary-500)';
+              slot.style.background = '#fff';
+            }
+            if (removeBtn && mode !== 'view' && mode !== 'print') {
+              removeBtn.style.display = 'flex';
+            }
+          }
+        }
+      });
+    }
+
+    // Disable form if view/print
+    if (mode === 'view' || mode === 'print') {
+      document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.disabled = true;
+        el.style.background = 'transparent';
+        el.style.border = 'none';
+        el.style.color = '#111827';
+        el.style.appearance = 'none';
+      });
+      document.querySelectorAll('.btn').forEach(btn => {
+        if (btn.id !== 'submitBtn') btn.style.display = 'none';
+      });
+      if (mode === 'print') { setTimeout(() => window.print(), 800); }
+    }
+  } catch(e) {
+    console.error('Error loading valuation', e);
+  }
+}
+
+const initData = async () => {
+  const user = JSON.parse(localStorage.getItem('aw_user') || '{}');
+  const urlParams = new URLSearchParams(window.location.search);
+  const isEdit = !!urlParams.get('edit');
+  const isView = !!urlParams.get('view') || !!urlParams.get('print');
+  
+  if (!isEdit && !isView && user.can_add === false) {
+     alert('You do not have permission to add valuations.');
+     window.location.href = '/user/valuations';
+     return;
+  }
+  if (isEdit && user.can_edit === false) {
+     alert('You do not have permission to edit valuations.');
+     window.location.href = '/user/valuations';
+     return;
+  }
+
+  await loadFormOptions();
+  await loadExistingValuation(user);
+};
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initData);
+} else {
+  initData();
+}
+
+// Convert all text inputs and textareas to UPPERCASE on input
+document.addEventListener('input', function(e) {
+  if (e.target.tagName === 'TEXTAREA' || (e.target.tagName === 'INPUT' && e.target.type === 'text')) {
+    const start = e.target.selectionStart;
+    const end = e.target.selectionEnd;
+    e.target.value = e.target.value.toUpperCase();
+    e.target.setSelectionRange(start, end);
+  }
+});
+
+const initVehicleLogic = () => {
+  // Handle Tyre Type conditional logic for Material Selects
+  const tyreTypeSel = document.getElementById('sel_tyre_type');
+  const frMatSel = document.getElementById('sel_tyrefr_meterial');
+  const reMatSel = document.getElementById('sel_tyrere_meterial');
+  const frTypeSel = document.getElementById('sel_tyre_front_type');
+  const reTypeSel = document.getElementById('sel_tyre_rear_type');
+  
+  if (tyreTypeSel && frMatSel && reMatSel) {
+    tyreTypeSel.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val === 'Tyre') {
+        frMatSel.style.display = 'none';
+        reMatSel.style.display = 'none';
+        frMatSel.value = '';
+        reMatSel.value = '';
+      } else {
+        frMatSel.style.display = '';
+        reMatSel.style.display = '';
+      }
+      
+      if (val === 'Track') {
+        if (frTypeSel) frTypeSel.value = 'Right Side Track';
+        if (reTypeSel) reTypeSel.value = 'Left Side Track';
+      }
+    });
+    // Let options populate before initial trigger
+    setTimeout(() => {
+      tyreTypeSel.dispatchEvent(new Event('change'));
+    }, 800);
+  }
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initVehicleLogic);
+} else {
+  initVehicleLogic();
+}
+</script>

@@ -1,0 +1,186 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Icon from '../../components/Icon.astro';
+---
+<DashboardLayout title="Search Vehicle" subtitle="Search and manage vehicle records" role="admin" activePage="search">
+
+  <div class="page-header">
+    <h1>Search Vehicle</h1>
+    <p>Search across all vehicle valuation records</p>
+  </div>
+
+  <!-- Search Form -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-body" style="display:flex;gap:12px;align-items:center;">
+      <div class="search-icon-wrapper" style="position:relative;flex:1;max-width:600px;">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--neutral-400);"><Icon name="search" size="18"/></span>
+        <input type="text" class="form-control" id="q_all" placeholder="Search by Register No, Make, Model, Engine, Chassis, YOM..." oninput="filterTable()" style="width:100%;padding-left:36px;height:42px;font-size:1rem;" />
+      </div>
+      <button class="btn btn-secondary" onclick="clearSearch()" style="height:42px;"><Icon name="x" size="16"/> Clear</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="icon" style="background:var(--primary-100);color:var(--primary-600);"><Icon name="car" /></div>
+        Search Results
+        <span class="badge badge-blue" id="resultCount">Loading...</span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <select class="form-control" id="q_status" style="width:auto;height:32px;font-size:.8rem;" onchange="filterTable()">
+          <option value="">All Status</option>
+          <option value="Approved">Approved</option>
+          <option value="Pending">Pending</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrapper" style="border:none;border-radius:0;">
+      <table id="vehicleTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Register No.</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Engine No.</th>
+            <th>Chassis No.</th>
+            <th>YOM</th>
+            <th>Market Value</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="vtbody">
+          <tr><td colspan="10" style="text-align:center;padding:32px;color:var(--neutral-400);">Loading records...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="padding:14px 22px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--neutral-100);">
+      <div style="font-size:.8rem;color:var(--neutral-500);" id="tableInfo">Showing 0 results</div>
+      <div style="display:flex;gap:4px;" id="pageButtons">
+      </div>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+const API = 'http://localhost:8080';
+const token = localStorage.getItem('aw_token') || '';
+
+let allData = [];
+let filtered = [];
+let page = 1;
+const perPage = 20;
+
+async function loadData() {
+  try {
+    const res = await fetch(`${API}/api/valuations?per_page=1000`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    allData = (data.success && data.data?.items) ? data.data.items : [];
+  } catch(e) {
+    console.error(e);
+    allData = [];
+  }
+  window.filterTable();
+}
+
+window.filterTable = function() {
+  const q = (document.getElementById('q_all')?.value || '').toLowerCase();
+  const status = document.getElementById('q_status')?.value || '';
+
+  filtered = allData.filter(v => {
+    const text = [
+      v.reg_no, v.make, v.model, v.engine_no, v.chassis_no, v.yom, String(v.id)
+    ].filter(Boolean).join(' ').toLowerCase();
+    
+    const rowStatus = v.status || 'Pending';
+    return text.includes(q) && (status === '' || rowStatus === status);
+  });
+
+  page = 1;
+  document.getElementById('resultCount').textContent = filtered.length + ' records';
+  document.getElementById('tableInfo').textContent = 'Showing ' + filtered.length + ' results';
+  renderPage();
+};
+
+window.clearSearch = function() {
+  const el = document.getElementById('q_all');
+  if (el) el.value = '';
+  const st = document.getElementById('q_status');
+  if (st) st.value = '';
+  window.filterTable();
+};
+
+function renderPage() {
+  const start = (page - 1) * perPage;
+  const slice = filtered.slice(start, start + perPage);
+  const tbody = document.getElementById('vtbody');
+
+  if (!slice.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--neutral-400);">No matching vehicles found</td></tr>';
+    document.getElementById('pageButtons').innerHTML = '';
+    return;
+  }
+
+  tbody.innerHTML = slice.map(v => {
+    const st = v.status || 'Pending';
+    const cls = st === 'Approved' ? 'badge-success' : st === 'Pending' ? 'badge-warning' : 'badge-danger';
+    
+    return `
+      <tr>
+        <td class="td-mono" style="color:var(--neutral-400);">#${v.id}</td>
+        <td><span class="td-mono" style="font-weight:600;color:var(--neutral-800);">${v.reg_no || '—'}</span></td>
+        <td style="font-weight:500;">${v.make || '—'}</td>
+        <td style="color:var(--neutral-600);">${v.model || '—'}</td>
+        <td class="td-mono" style="font-size:.78rem;">${v.engine_no || '—'}</td>
+        <td class="td-mono" style="font-size:.78rem;">${v.chassis_no || '—'}</td>
+        <td class="td-mono">${v.yom || '—'}</td>
+        <td class="td-mono" style="font-weight:600;color:var(--neutral-700);">Rs. ${(v.market_value||0).toLocaleString()}</td>
+        <td><span class="badge ${cls}">${st}</span></td>
+        <td>
+          <div style="display:flex;gap:4px;">
+            <a href="/admin/view-valuation?id=${v.id}" class="btn btn-ghost btn-sm" title="View Details" style="padding:4px;">${window.ICONS.eye}</a>
+            <a href="/admin/add-valuation?edit=${v.id}" class="btn btn-ghost btn-sm" title="Edit" style="padding:4px;">${window.ICONS.edit}</a>
+            <a href="javascript:void(0)" onclick="window.open('/reports/${v.id}?token=' + encodeURIComponent(localStorage.getItem('aw_token')), '_blank')" class="btn btn-ghost btn-sm" title="Print" style="padding:4px;">${window.ICONS.printer}</a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  renderPagination();
+}
+
+function renderPagination() {
+  const pages = Math.ceil(filtered.length / perPage);
+  const wrap = document.getElementById('pageButtons');
+  if (pages <= 1) { wrap.innerHTML = ''; return; }
+
+  let html = `<button class="btn btn-secondary btn-sm" onclick="window.goPage(${page-1})" ${page===1?'disabled':''}>‹ Prev</button>`;
+  for (let i = 1; i <= pages; i++) {
+    if (i === 1 || i === pages || Math.abs(i - page) <= 2) {
+      html += `<button class="btn btn-sm ${i===page?'btn-primary':'btn-secondary'}" onclick="window.goPage(${i})">${i}</button>`;
+    } else if (Math.abs(i - page) === 3) {
+      html += `<span style="padding:0 4px;align-self:center;color:var(--neutral-400);">…</span>`;
+    }
+  }
+  html += `<button class="btn btn-secondary btn-sm" onclick="window.goPage(${page+1})" ${page===pages?'disabled':''}>Next ›</button>`;
+  wrap.innerHTML = html;
+}
+
+window.goPage = function(p) {
+  const pages = Math.ceil(filtered.length / perPage);
+  if (p < 1 || p > pages) return;
+  page = p;
+  renderPage();
+}
+
+loadData();
+</script>

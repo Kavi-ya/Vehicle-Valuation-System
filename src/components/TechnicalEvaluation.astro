@@ -1,0 +1,94 @@
+---
+const { tech } = Astro.props;
+---
+<div class="tech-eval-container">
+<div class="section-title" style="color: purple; background: transparent; border: none; padding: 0; margin-bottom: 15px; font-size: 14px;">4.0 TECHNICAL EVALUATION</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 30px;">
+    <!-- Left Column -->
+    <div style="display: flex; flex-direction: column; row-gap: 2px;">
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.1 Transmission</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.1.1 Gear Box</span><span>: <strong>{tech.gearBox}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.1.2 Clutch</span><span>: <strong>{tech.clutch}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.1.3 Shafting</span><span>: <strong>{tech.shafting}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.1.4 Differential</span><span>: <strong>{tech.differential}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.1.5 Gear Selection</span><span>: <strong>{tech.gearSelection}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.2 Suspension</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.2.1 Front</span><span>: <strong>{tech.suspensionFront}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.2.2 Rear</span><span>: <strong>{tech.suspensionRear}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.3 Brakes</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.3.1 Foot Brakes</span><span>: <strong>{tech.footBrakes}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.3.2 Hand Brakes</span><span>: <strong>{tech.handBrakes}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div class="data-row" style="border:none;"><span style="font-weight: bold;">4.4 Steering</span><span>: <strong>{tech.steering}</strong></span></div>
+            <div class="data-row" style="border:none;"><span style="font-weight: bold;">4.5 Chassis Condition</span><span>: <strong>{tech.chassisCond}</strong></span></div>
+            <div class="data-row" style="border:none;"><span style="font-weight: bold;">4.6 Body Condition</span><span>: <strong>{tech.bodyCond}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.7 Electrical System</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.7.1 S/Starter</span><span>: <strong>{tech.starter}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.7.2 Wipers</span><span>: <strong>{tech.wipers}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.7.3 Horn</span><span>: <strong>{tech.horn}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.7.4 Lights</span><span>: <strong>{tech.lights}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.7.5 Meters</span><span>: <strong>{tech.meters}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.7.6 Alternator</span><span>: <strong>{tech.alternator}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.8 Engine</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.8.1 Condition</span><span>: <strong>{tech.engineCond}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.8.2 Status</span><span>: <strong>{tech.engineStatus}</strong></span></div>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div style="display: flex; flex-direction: column; row-gap: 2px;">
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.9 Tires</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.9.1 Front Size:</span><span>: <strong>{tech.tireFrontPct}</strong> %</span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.9.2 Rear Size:</span><span>: <strong>{tech.tireRearPct}</strong> %</span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.9.3 Spare Size:</span><span>: <strong>{tech.tireSparePct}</strong> %</span></div>
+            <div class="data-row" style="border:none; padding-left: 20px;"><span>Rear Wheels</span><span>: <strong>{tech.rearWheels}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.10 Major Repairs</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.10.1 Needed Within A Year</span><span>: <strong>{tech.neededWithinYear}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.10.2 Body Parts Replaced</span><span>: <strong>{tech.bodyPartsReplaced}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.10.3 Accident</span><span>: <strong>{tech.accident}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.10.4 Write Off By Insures</span><span>: <strong>{tech.writeOff}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.10.5 Comments</span><span>: <strong>{tech.majorRepairsComments}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="border:none; display: flex; gap: 5px; margin-bottom: 2px;"><span style="font-weight: bold;">4.11 Compliance With Environment Regulations:</span> <span><strong>{tech.envCompliance}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 30px;"><span>Comments</span><span>: - <strong>{tech.envComplianceComments}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.12 Maintenance</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.12.1 Mechanical</span><span>: <strong>{tech.maintMechanical}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.12.2 Mirrors</span><span>: <strong>{tech.maintMirrors}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.12.3 Internal Trim</span><span>: <strong>{tech.maintInternalTrim}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">4.13 Options</div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.13.1 P.Shutters</span><span>: <strong>{tech.optShutters}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.13.2 P.Mirrors</span><span>: <strong>{tech.optMirrors}</strong></span></div>
+            <div class="data-row" style="border:none; padding-left: 10px;"><span>4.13.3 A/C</span><span>: <strong>{tech.optAc}</strong></span></div>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <div class="data-row" style="border:none;"><span style="font-weight: bold;">4.14 Doors</span><span>: <strong>{tech.doors}</strong></span></div>
+            <div class="data-row" style="border:none;"><span style="font-weight: bold;">4.15 Roof Type</span><span>: <strong>{tech.roofType}</strong></span></div>
+            <div class="data-row" style="border:none;"><span style="font-weight: bold;">4.16 Body</span><span>: <strong>{tech.body}</strong></span></div>
+        </div>
+    </div>
+</div>
+</div>
+<style is:global>
+    .tech-eval-container .data-row {
+        grid-template-columns: 180px 1fr !important;
+    }
+</style>
